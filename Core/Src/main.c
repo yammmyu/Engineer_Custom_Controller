@@ -90,20 +90,23 @@ int main(void)
   MX_GPIO_Init();
   MX_CAN1_Init();
   MX_USART3_UART_Init();
+  MX_CAN2_Init();
   /* USER CODE BEGIN 2 */
   Enable_CAN1();
+  Enable_CAN2();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
-    /* USER CODE END WHILE */
+      HAL_Delay(10);  // loop runs every 1 ms
+      Set_GM6020_Current(2000, 1000, 0);
+      Set_M2006_Current(500, 0, 0);
 
-    /* USER CODE BEGIN 3 */
-      HAL_Delay(10);
-      Set_Motor_Current(2000, 0, 0, 0);
   }
+
   /* USER CODE END 3 */
 }
 

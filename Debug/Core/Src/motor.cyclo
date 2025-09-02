@@ -1,3 +1,5 @@
-../Core/Src/motor.c:13:6:Enable_CAN1	2
-../Core/Src/motor.c:35:6:Set_Motor_Current	2
-../Core/Src/motor.c:61:6:HAL_CAN_RxFifo0MsgPendingCallback	3
+../Core/Src/motor.c:15:6:Enable_CAN1	2
+../Core/Src/motor.c:37:6:Enable_CAN2	2
+../Core/Src/motor.c:62:6:Set_GM6020_Current	2
+../Core/Src/motor.c:86:6:Set_M2006_Current	2
+../Core/Src/motor.c:113:6:HAL_CAN_RxFifo0MsgPendingCallback	3
