@@ -7,9 +7,19 @@
 
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
-const uint32_t CAN_CMD_ID = 0x1ff;
 
-float angle;
+//motor data read
+#define get_motor_measure(ptr, data)                                    \
+    {                                                                   \
+        (ptr)->last_ecd = (ptr)->ecd;                                   \
+        (ptr)->ecd = (uint16_t)((data)[0] << 8 | (data)[1]);            \
+        (ptr)->speed_rpm = (uint16_t)((data)[2] << 8 | (data)[3]);      \
+        (ptr)->given_current = (uint16_t)((data)[4] << 8 | (data)[5]);  \
+        (ptr)->temperate = (data)[6];                                   \
+    }
+
+
+static motor_measure_t motor_chassis[6];
 
 /* ------------------------------ 初始化（配置过滤器）------------------------------ */
 void Enable_CAN1(void)
@@ -118,7 +128,16 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
         uint8_t RxData[8];
         if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)  // 获得接收到的数据头和数据
         {
-            angle = ((RxData[0] << 8) | RxData[1]);
+            switch (RxHeader.StdId)
+            {
+            	case CAN_M2006_M1_ID: return 0;
+            	case CAN_M2006_M2_ID: return 1;
+            	case CAN_M2006_M3_ID: return 2;
+            	case CAN_GM6020_M5_ID: return 3;
+            	case CAN_GM6020_M6_ID: return 4;
+            	case CAN_GM6020_M7_ID: return 5;
+            	}
+            }
         }
     }
     HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);  // 再次使能FIFO0接收中断
