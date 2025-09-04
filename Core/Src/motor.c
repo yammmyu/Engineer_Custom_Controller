@@ -8,20 +8,18 @@
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
 
-//motor data read
-#define get_motor_measure(ptr, data)                                    \
-    {                                                                   \
-        (ptr)->last_ecd = (ptr)->ecd;                                   \
-        (ptr)->ecd = (uint16_t)((data)[0] << 8 | (data)[1]);            \
-        (ptr)->speed_rpm = (uint16_t)((data)[2] << 8 | (data)[3]);      \
-        (ptr)->given_current = (uint16_t)((data)[4] << 8 | (data)[5]);  \
-        (ptr)->temperate = (data)[6];                                   \
+motor_measure_t all_motors[6];
+
+//static in-line function to decode the CAN message feedback
+static inline void get_motor_measure(motor_measure_t *ptr, const uint8_t *data)
+    {
+        ptr ->last_ecd			= ptr->ecd;
+        ptr ->ecd				= (uint16_t)((data[0] << 8) | data[1]);
+        ptr ->speed_rpm 		= (uint16_t)((data)[2] << 8 | (data)[3]);
+        ptr ->given_current		= (uint16_t)((data)[4] << 8 | (data)[5]);
+        ptr ->temperature 		= (data)[6];
     }
-
-
-static motor_measure_t motor_chassis[6];
-
-/* ------------------------------ 初始化（配置过滤器）------------------------------ */
+/* ------------------------------ Initialization of CAN, filter Setup）------------------------------ */
 void Enable_CAN1(void)
 {
     CAN_FilterTypeDef CAN_Filter;
@@ -106,8 +104,8 @@ void Set_M2006_Current(int16_t q1, int16_t q2, int16_t q3)
     TxData[7] = (uint8_t)0;
     CAN_TxHeaderTypeDef TxHeader = {
             .DLC = 8,
-            .IDE = CAN_ID_STD,    // 标准帧
-            .RTR = CAN_RTR_DATA,  // 数据帧
+            .IDE = CAN_ID_STD,    //standard frame
+            .RTR = CAN_RTR_DATA,  //data frame
             .StdId = 0x200
     };
     uint32_t TxBox = CAN_TX_MAILBOX0;
@@ -116,30 +114,55 @@ void Set_M2006_Current(int16_t q1, int16_t q2, int16_t q3)
     }
 }
 
-
-
-
-/* ------------------------------------------ 接收函数 ------------------------------------------ */
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
+//maps the CAN feedback ID with the motor ID
+/*
+ * M2060 0x200 + driver ID
+ * 0x201 --> 1
+ * 0x202 --> 2
+ * 0x203 --> 3
+ *
+ * GM6020 0x204 + driver ID
+ * 0x205 --> 4
+ * 0x206 --> 5
+ * 0x207 --> 6
+ * */
+static int8_t motor_index_from_id(uint16_t id)
 {
-    if (hcan == &hcan1)
-    {
-        CAN_RxHeaderTypeDef RxHeader;
-        uint8_t RxData[8];
-        if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK)  // 获得接收到的数据头和数据
-        {
-            switch (RxHeader.StdId)
-            {
-            	case CAN_M2006_M1_ID: return 0;
-            	case CAN_M2006_M2_ID: return 1;
-            	case CAN_M2006_M3_ID: return 2;
-            	case CAN_GM6020_M5_ID: return 3;
-            	case CAN_GM6020_M6_ID: return 4;
-            	case CAN_GM6020_M7_ID: return 5;
-            	}
-            }
-        }
-    }
-    HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);  // 再次使能FIFO0接收中断
+	switch (id)
+	{
+		case CAN_M2006_M1_ID: return 0;
+		case CAN_M2006_M2_ID: return 1;
+		case CAN_M2006_M3_ID: return 2;
+		case CAN_GM6020_M5_ID: return 3;
+		case CAN_GM6020_M6_ID: return 4;
+		case CAN_GM6020_M7_ID: return 5;
+
+		default: return -1; //safety, filters any noise
+	}
+}
+
+
+//Callback function to receive data
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+	if (hcan == &hcan1 || hcan == &hcan2)
+	{
+		CAN_RxHeaderTypeDef rx_header;
+		uint8_t rx_data[8];
+
+		if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data) == HAL_OK)
+		{
+			int8_t idx = motor_index_from_id(rx_header.StdId);
+			if (idx >= 0)
+			{
+				get_motor_measure(&all_motors[idx], rx_data);
+
+				all_motors[idx].angle_deg = (all_motors[idx].ecd / 8192.0f) * 360.0f;
+			}
+
+		}
+	}
+
+	HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
 }
 
