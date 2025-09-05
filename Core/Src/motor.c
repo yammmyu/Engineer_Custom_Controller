@@ -20,49 +20,35 @@ static inline void get_motor_measure(motor_measure_t *ptr, const uint8_t *data)
         ptr ->temperature 		= (data)[6];
     }
 /* ------------------------------ Initialization of CAN, filter Setup）------------------------------ */
-void Enable_CAN1(void)
-{
-    CAN_FilterTypeDef CAN_Filter;
-    CAN_Filter.FilterFIFOAssignment = CAN_FILTER_FIFO0;
-    CAN_Filter.FilterScale = CAN_FILTERSCALE_32BIT;
-    CAN_Filter.FilterBank = 0;
-    CAN_Filter.FilterMode = CAN_FILTERMODE_IDMASK;
-    CAN_Filter.SlaveStartFilterBank = 0;
-    CAN_Filter.FilterActivation = CAN_FILTER_ENABLE;
-    CAN_Filter.FilterIdHigh = 0x0000;
-    CAN_Filter.FilterIdLow = 0x0000;
-    CAN_Filter.FilterMaskIdHigh= 0x0000;
-    CAN_Filter.FilterMaskIdLow = 0x0000;
-    if (HAL_CAN_ConfigFilter(&hcan1,&CAN_Filter)!= HAL_OK){
-    	HAL_GPIO_WritePin(LED_R_GPIO_Port,LED_R_Pin,GPIO_PIN_SET);
-        Error_Handler();
-    }
-    HAL_CAN_Start(&hcan1);
-    HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);  // CAN1 -> FIFO0
-}
-
-
 void Enable_CAN2(void)
 {
     CAN_FilterTypeDef CAN_Filter;
-    CAN_Filter.FilterFIFOAssignment = CAN_FILTER_FIFO1;   // Use FIFO1 for CAN2
+
+    CAN_Filter.FilterFIFOAssignment = CAN_FILTER_FIFO0;
     CAN_Filter.FilterScale = CAN_FILTERSCALE_32BIT;
-    CAN_Filter.FilterBank = 14;   // Banks 0–13 reserved for CAN1, use 14+ for CAN2
+    CAN_Filter.FilterBank = 14;             // start filters for CAN2 here
     CAN_Filter.FilterMode = CAN_FILTERMODE_IDMASK;
-    CAN_Filter.SlaveStartFilterBank = 14; // Splits filters between CAN1 and CAN2
+    CAN_Filter.SlaveStartFilterBank = 14;   // 0–13 for CAN1, 14–27 for CAN2
     CAN_Filter.FilterActivation = CAN_FILTER_ENABLE;
     CAN_Filter.FilterIdHigh = 0x0000;
     CAN_Filter.FilterIdLow = 0x0000;
-    CAN_Filter.FilterMaskIdHigh= 0x0000;
+    CAN_Filter.FilterMaskIdHigh = 0x0000;   // accept all IDs
     CAN_Filter.FilterMaskIdLow = 0x0000;
 
     if (HAL_CAN_ConfigFilter(&hcan2, &CAN_Filter) != HAL_OK){
-        HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_SET);
         Error_Handler();
+    }
+    // 👇 Add this check here
+    if (HAL_CAN_Start(&hcan2) != HAL_OK) {
+    	Error_Handler();
+    }
+
+    if (HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK) {
+    	Error_Handler();
     }
 
     HAL_CAN_Start(&hcan2);
-    HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);  // CAN2 -> FIFO1
+    HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
 }
 
 
@@ -143,6 +129,7 @@ static int8_t motor_index_from_id(uint16_t id)
 
 
 //Callback function to receive data
+/*
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 	if (hcan == &hcan1 || hcan == &hcan2)
@@ -165,4 +152,24 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
 	HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
 }
+*/
 
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+{
+    CAN_RxHeaderTypeDef rx_header;
+    uint8_t rx_data[8];
+
+    HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);  // 👈 Debug indicator
+
+    if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data) == HAL_OK)
+    {
+        HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);  // 👈 Debug indicator
+
+        int8_t idx = motor_index_from_id(rx_header.StdId);
+        if (idx >= 0)
+        {
+            get_motor_measure(&all_motors[idx], rx_data);
+            all_motors[idx].angle_deg = (all_motors[idx].ecd / 8192.0f) * 360.0f;
+        }
+    }
+}

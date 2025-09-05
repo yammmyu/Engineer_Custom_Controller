@@ -1,7 +1,6 @@
 ../Core/Src/motor.c:14:20:get_motor_measure	1
-../Core/Src/motor.c:23:6:Enable_CAN1	2
-../Core/Src/motor.c:45:6:Enable_CAN2	2
-../Core/Src/motor.c:70:6:Set_GM6020_Current	2
-../Core/Src/motor.c:94:6:Set_M2006_Current	2
-../Core/Src/motor.c:129:15:motor_index_from_id	7
-../Core/Src/motor.c:146:6:HAL_CAN_RxFifo0MsgPendingCallback	5
+../Core/Src/motor.c:23:6:Enable_CAN2	4
+../Core/Src/motor.c:56:6:Set_GM6020_Current	2
+../Core/Src/motor.c:80:6:Set_M2006_Current	2
+../Core/Src/motor.c:115:15:motor_index_from_id	7
+../Core/Src/motor.c:157:6:HAL_CAN_RxFifo0MsgPendingCallback	3

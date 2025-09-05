@@ -24,8 +24,8 @@ typedef enum
 	CAN_M2006_M3_ID = 0x203,
 
 	CAN_GM6020_M5_ID = 0x209,
-	CAN_GM6020_M6_ID = 0x206,
-	CAN_GM6020_M7_ID = 0x207,
+	CAN_GM6020_M6_ID = 0x20A,
+	CAN_GM6020_M7_ID = 0x20B,
 
 } can_msg_id_e;
 
@@ -38,7 +38,7 @@ typedef struct
 	int16_t given_current;
 	uint8_t temperature;
 	int16_t last_ecd;
-	float angle_deg;
+	volatile float angle_deg;
 } motor_measure_t;
 
 

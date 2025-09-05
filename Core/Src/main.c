@@ -92,21 +92,17 @@ int main(void)
   MX_USART3_UART_Init();
   MX_CAN2_Init();
   /* USER CODE BEGIN 2 */
-  Enable_CAN1();
   Enable_CAN2();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
   while (1)
   {
-      HAL_Delay(10);  // loop runs every 1 ms
-      Set_GM6020_Current(2000, 1000, 0);
-      Set_M2006_Current(500, 0, 0);
+    /* USER CODE END WHILE */
 
+    /* USER CODE BEGIN 3 */
   }
-
   /* USER CODE END 3 */
 }
 
@@ -156,7 +152,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /* USER CODE END 4 */
 
 /**
@@ -167,9 +162,12 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
   __disable_irq();
   while (1)
   {
+      HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);
+      HAL_Delay(250); // blink every 250ms
   }
   /* USER CODE END Error_Handler_Debug */
 }
