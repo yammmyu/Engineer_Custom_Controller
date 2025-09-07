@@ -1,8 +1,1 @@
-../Core/Src/pid.c:11:6:PIDController_Init	32	static
-../Core/Src/pid.c:21:7:PIDController_Update	40	static
-../Core/Src/pid.c:46:6:MotorPID_Init	16	static
-../Core/Src/pid.c:67:6:Set_Motor_Position	16	static
-../Core/Src/pid.c:78:6:Disable_Motor	16	static
-../Core/Src/pid.c:85:6:Disable_All_Motors	16	static
-../Core/Src/pid.c:93:6:Set_Safe_Mode	16	static
-../Core/Src/pid.c:102:6:Motor_Control_Update	48	static
+../Core/Src/pid.c:17:7:pid_update	48	static

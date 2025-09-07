@@ -93,16 +93,14 @@ int main(void)
   MX_CAN2_Init();
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
-  MotorPID_Init();
-  Set_Motor_Position(5, 150.0f);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  Motor_Control_Update();  // Update PID and send CAN commands
-	  HAL_Delay(1);  // Control loop timing
+	  HAL_Delay(100);
+	  Set_GM6020_Current(1000, 1000, 1000);
   }
   /* USER CODE END 3 */
 }
