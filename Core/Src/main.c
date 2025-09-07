@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "motor.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,7 +66,6 @@ int c = 0;
   */
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -93,15 +93,16 @@ int main(void)
   MX_CAN2_Init();
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
+  MotorPID_Init();
+  Set_Motor_Position(5, 150.0f);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+	  Motor_Control_Update();  // Update PID and send CAN commands
+	  HAL_Delay(1);  // Control loop timing
   }
   /* USER CODE END 3 */
 }
