@@ -53,7 +53,7 @@ void Enable_CAN2(void)
 
 
 /* ------------------------------ 发送函数 ------------------------------ */
-void Set_GM6020_Current(int16_t q1, int16_t q2, int16_t q3)
+void Set_GM6020_Voltage(int16_t q1, int16_t q2, int16_t q3)
 {
     uint8_t TxData[8];
     TxData[0] = (uint8_t)(q1>>8);

@@ -26,6 +26,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "motor.h"
+#include "arm_control.h"
+#include "timebase.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,7 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+volatile int16_t debug_cmd_motor7 = 0;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -57,7 +59,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int c = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -73,7 +75,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -83,7 +85,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  arm_control_init();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -99,8 +101,18 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_Delay(100);
-	  Set_GM6020_Current(1000, 1000, 1000);
+	  float dt = get_dt();
+
+	  float pos_target = 300.0f; //remeber to add a filter for negative values not allowed
+	  float pos_meas = all_motors[5].angle_deg;
+	  float vel_meas = all_motors[5].speed_rpm;
+
+	  debug_cmd_motor7 = arm_control_update(pos_target, pos_meas, vel_meas, dt);
+
+	  //int16_t cmd_motor7 = arm_control_update(pos_target, pos_meas, vel_meas, dt);
+
+	  Set_GM6020_Voltage(0, 0, debug_cmd_motor7);
+	  HAL_Delay(10);
   }
   /* USER CODE END 3 */
 }
@@ -181,8 +193,9 @@ HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
+  /* User can add his SSSown implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
+
 #endif /* USE_FULL_ASSERT */

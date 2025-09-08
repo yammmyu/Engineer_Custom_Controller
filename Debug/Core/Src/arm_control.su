@@ -1,0 +1,2 @@
+../Core/Src/arm_control.c:8:6:arm_control_init	8	static
+../Core/Src/arm_control.c:25:9:arm_control_update	32	static

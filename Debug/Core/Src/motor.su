@@ -1,6 +1,6 @@
 ../Core/Src/motor.c:14:20:get_motor_measure	16	static
 ../Core/Src/motor.c:23:6:Enable_CAN2	48	static
-../Core/Src/motor.c:56:6:Set_GM6020_Current	56	static
+../Core/Src/motor.c:56:6:Set_GM6020_Voltage	56	static
 ../Core/Src/motor.c:80:6:Set_M2006_Current	56	static
 ../Core/Src/motor.c:115:15:motor_index_from_id	16	static
 ../Core/Src/motor.c:157:6:HAL_CAN_RxFifo0MsgPendingCallback	56	static

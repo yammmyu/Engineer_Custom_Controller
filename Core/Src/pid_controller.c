@@ -1,4 +1,7 @@
 #include "pid_controller.h"
+#include <math.h>
+
+volatile float error = 0.0;
 
 void pid_init(PID_t *pid,
               float Kp, float Ki, float Kd,
@@ -32,7 +35,15 @@ float clampf(float value, float min_val, float max_val)
 
 float pid_update(PID_t *pid, float setpoint, float measurement, float dt)
 {
-    float error = setpoint - measurement;
+	if (fabs(setpoint - measurement) > 180.0) {
+		if (setpoint > measurement) {
+			error = (setpoint - measurement) - 360;
+		}else{
+			error = (setpoint - measurement) + 360;
+		}
+	}else{
+		error = setpoint - measurement;
+	}
 
     // Proportional
     float P_out = pid->Kp * error;
