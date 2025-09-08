@@ -1,28 +1,69 @@
-#include <pid_controller.h>
+#include "pid_controller.h"
 
-// Declare PID instances
-pid_t pid_pos = { .Kp=10, .Ki=0.1, .Kd=0.2, .out_min=-200, .out_max=200,
-                  .integ_min=-20, .integ_max=20, .I_deadband=0.5 };
-pid_t pid_vel = { .Kp=0.035, .Ki=0.3, .Kd=0.001, .out_min=-1.62, .out_max=1.62,
-                  .integ_min=-1.0, .integ_max=1.0, .I_deadband=0 };
-pid_t pid_cur = { .Kp=0.7, .Ki=300, .Kd=0, .out_min=-1.62, .out_max=1.62,
-                  .integ_min=-1.0, .integ_max=1.0, .I_deadband=0 };
+void pid_init(PID_t *pid,
+              float Kp, float Ki, float Kd,
+              float out_min, float out_max,
+              float integ_min, float integ_max,
+              float I_deadband)
+{
+    pid->Kp = Kp;
+    pid->Ki = Ki;
+    pid->Kd = Kd;
 
-void control_loop(float dt_pos, float dt_vel, float dt_cur) {
-    float target_angle = 30.0f;  // deg
-    float current_angle = read_joint_angle();
-    float target_velocity = pid_update(&pid_pos, target_angle, current_angle, dt_pos);
+    pid->integrator = 0.0f;
+    pid->prev_error = 0.0f;
+    pid->prev_measurement = 0.0f;
 
-    float current_velocity = read_joint_velocity();
-    float target_current = pid_update(&pid_vel, target_velocity, current_velocity, dt_vel);
+    pid->out_min = out_min;
+    pid->out_max = out_max;
 
-    float motor_command;
-    if (have_current_feedback()) {
-        float current_measure = read_motor_current();
-        motor_command = pid_update(&pid_cur, target_current, current_measure, dt_cur);
-    } else {
-        motor_command = target_current; // open-loop current
+    pid->integ_min = integ_min;
+    pid->integ_max = integ_max;
+
+    pid->I_deadband = I_deadband;
+}
+
+float clampf(float value, float min_val, float max_val)
+{
+    if (value > max_val) return max_val;
+    if (value < min_val) return min_val;
+    return value;
+}
+
+float pid_update(PID_t *pid, float setpoint, float measurement, float dt)
+{
+    float error = setpoint - measurement;
+
+    // Proportional
+    float P_out = pid->Kp * error;
+
+    // Integral with deadband
+    if (fabsf(error) < pid->I_deadband) {
+        pid->integrator += pid->Ki * error * dt;
+        pid->integrator = clampf(pid->integrator, pid->integ_min, pid->integ_max);
     }
 
-    send_current_to_gm6020(motor_command);
+    // Derivative on measurement
+    float derivative = (measurement - pid->prev_measurement) / dt;
+    float D_out = -pid->Kd * derivative;
+
+    float output = P_out + pid->integrator + D_out;
+
+    // Clamp total output
+    output = clampf(output, pid->out_min, pid->out_max);
+
+    // Save for next iteration
+    pid->prev_error = error;
+    pid->prev_measurement = measurement;
+
+    return output;
+}
+
+int16_t voltage_to_can(float demand)
+{
+    // demand expected in [-1, 1], scale to [-25000, 25000]
+    if (demand > 1.0f) demand = 1.0f;
+    if (demand < -1.0f) demand = -1.0f;
+
+    return (int16_t)(demand * 25000.0f);
 }
