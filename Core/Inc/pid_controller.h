@@ -1,16 +1,53 @@
-#ifndef PID_H
-#define PID_H
+#ifndef PID_CONTROLLER_H
+#define PID_CONTROLLER_H
+
+#include <stdint.h>
 
 typedef struct {
-    float Kp, Ki, Kd;
+    float Kp;
+    float Ki;
+    float Kd;
+
     float integrator;
-    float last_error;
-    float last_measure;
-    float out_min, out_max;
-    float integ_min, integ_max;
+    float prev_error;
+    float prev_measurement;
+
+    float out_min;
+    float out_max;
+
+    float integ_min;
+    float integ_max;
+
     float I_deadband;
-} pid_t;
+} PID_t;
 
-float pid_update(pid_t *pid, float setpoint, float measurement, float dt);
+/**
+ * @brief Initialize a PID controller with given parameters.
+ */
+void pid_init(PID_t *pid,
+              float Kp, float Ki, float Kd,
+              float out_min, float out_max,
+              float integ_min, float integ_max,
+              float I_deadband);
 
-#endif
+/**
+ * @brief Update a PID controller.
+ * @param pid Pointer to PID struct
+ * @param setpoint Desired value
+ * @param measurement Actual measured value
+ * @param dt Time step (s)
+ * @return Control signal
+ */
+float pid_update(PID_t *pid, float setpoint, float measurement, float dt);
+
+/**
+ * @brief Clamp helper
+ */
+float clampf(float value, float min_val, float max_val);
+
+/**
+ * @brief Map float [-1,1] voltage demand to CAN command [-25000, 25000].
+ */
+int16_t voltage_to_can(float demand);
+
+#endif // PID_CONTROLLER_H
