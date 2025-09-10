@@ -103,16 +103,16 @@ int main(void)
   {
 	  float dt = get_dt();
 
-	  float pos_target = 300.0f; //remeber to add a filter for negative values not allowed
-	  float pos_meas = all_motors[5].angle_deg;
-	  float vel_meas = all_motors[5].speed_rpm;
+	  float pos_target = 170.0f; //remeber to add a filter for negative values not allowed
+	  float pos_meas = all_motors[4].angle_deg;
+	  float vel_meas = all_motors[4].speed_rpm;
 
 	  debug_cmd_motor7 = arm_control_update(pos_target, pos_meas, vel_meas, dt);
 
 	  //int16_t cmd_motor7 = arm_control_update(pos_target, pos_meas, vel_meas, dt);
 
-	  Set_GM6020_Voltage(0, 0, debug_cmd_motor7);
-	  HAL_Delay(10);
+	  Set_GM6020_Voltage(0, debug_cmd_motor7, 0);
+	  HAL_Delay(2);
   }
   /* USER CODE END 3 */
 }

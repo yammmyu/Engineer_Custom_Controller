@@ -35,15 +35,14 @@ float clampf(float value, float min_val, float max_val)
 
 float pid_update(PID_t *pid, float setpoint, float measurement, float dt)
 {
-	if (fabs(setpoint - measurement) > 180.0) {
-		if (setpoint > measurement) {
-			error = (setpoint - measurement) - 360;
-		}else{
-			error = (setpoint - measurement) + 360;
-		}
-	}else{
-		error = setpoint - measurement;
-	}
+	float diff = setpoint - measurement;
+
+	// Wrap both into [0, 360)
+	diff = fmodf(diff, 360.0f);
+	if (diff < -180.0f) diff += 360.0f;
+	if (diff > 180.0f)  diff -= 360.0f;
+
+	error = diff;
 
     // Proportional
     float P_out = pid->Kp * error;
@@ -55,7 +54,15 @@ float pid_update(PID_t *pid, float setpoint, float measurement, float dt)
     }
 
     // Derivative on measurement
-    float derivative = (measurement - pid->prev_measurement) / dt;
+    float delta = measurement - pid->prev_measurement;
+
+    // Wrap delta into [-180, 180]
+    delta = fmodf(delta, 360.0f);
+    if (delta < -180.0f) delta += 360.0f;
+    if (delta > 180.0f)  delta -= 360.0f;
+
+    float derivative = delta / dt;
+
     float D_out = -pid->Kd * derivative;
 
     float output = P_out + pid->integrator + D_out;

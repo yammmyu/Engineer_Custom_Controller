@@ -1,2 +1,4 @@
-../Core/Src/arm_control.c:8:6:arm_control_init	8	static
-../Core/Src/arm_control.c:25:9:arm_control_update	32	static
+../Core/Src/arm_control.c:12:7:lowpass_filter_pos	16	static
+../Core/Src/arm_control.c:18:7:lowpass_filter_vel	16	static
+../Core/Src/arm_control.c:25:6:arm_control_init	8	static
+../Core/Src/arm_control.c:57:9:arm_control_update	40	static
