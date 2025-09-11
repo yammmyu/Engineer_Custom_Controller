@@ -108,9 +108,9 @@ void Set_M2006_Current(int16_t q1, int16_t q2, int16_t q3)
  * 0x203 --> 3
  *
  * GM6020 0x204 + driver ID
- * 0x205 --> 4
- * 0x206 --> 5
- * 0x207 --> 6
+ * 0x205 + 4 --> 0x209
+ * 0x205 + 4  --> 0x20A
+ * 0x205 + 4  --> 0x20B
  * */
 static int8_t motor_index_from_id(uint16_t id)
 {
