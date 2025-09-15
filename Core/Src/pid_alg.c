@@ -1,4 +1,4 @@
-#include "pid_controller.h"
+#include "pid_alg.h"
 #include <math.h>
 
 volatile float error = 0.0;

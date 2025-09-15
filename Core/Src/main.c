@@ -17,9 +17,9 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <pid_controller.h>
 #include "main.h"
 #include "can.h"
+#include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -28,6 +28,9 @@
 #include "motor.h"
 #include "arm_control.h"
 #include "timebase.h"
+#include "drv_bsp.h"
+#include "dvc_serialplot.h"
+#include "dvc_motor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,7 +51,13 @@ volatile int16_t debug_cmd_motor7 = 0;
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+static char Variable_Assignment_List[][SERIALPLOT_RX_VARIABLE_ASSIGNMENT_MAX_LENGTH] = {
+    //电机调PID
+    "po",
+    "io",
+    "do",
+    "fo",
+};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,7 +68,40 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+/**
+ * @brief HAL库UART接收DMA空闲中断
+ *
+ * @param huart UART编号
+ * @param Size 长度
+ */
+void UART_Serialplot_Call_Back(uint8_t *Buffer, uint16_t Length)
+{
+    serialplot.UART_RxCpltCallback(Buffer);
+    switch (serialplot.Get_Variable_Index())
+    {
+        // 电机调PID
+        case(0):
+        {
+            motor_3508.PID_Omega.Set_K_P(serialplot.Get_Variable_Value());
+        }
+        break;
+        case(1):
+        {
+            motor_3508.PID_Omega.Set_K_I(serialplot.Get_Variable_Value());
+        }
+        break;
+        case(2):
+        {
+            motor_3508.PID_Omega.Set_K_D(serialplot.Get_Variable_Value());
+        }
+        break;
+        case(3):
+        {
+            motor_3508.PID_Omega.Set_K_F(serialplot.Get_Variable_Value());
+        }
+        break;
+    }
+}
 /* USER CODE END 0 */
 
 /**
@@ -68,6 +110,7 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -75,7 +118,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -90,9 +133,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_CAN1_Init();
   MX_USART3_UART_Init();
   MX_CAN2_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
   /* USER CODE END 2 */
@@ -101,18 +146,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  float dt = get_dt();
+    /* USER CODE END WHILE */
 
-	  float pos_target = 170.0f; //remeber to add a filter for negative values not allowed
-	  float pos_meas = all_motors[4].angle_deg;
-	  float vel_meas = all_motors[4].speed_rpm;
-
-	  debug_cmd_motor7 = arm_control_update(pos_target, pos_meas, vel_meas, dt);
-
-	  //int16_t cmd_motor7 = arm_control_update(pos_target, pos_meas, vel_meas, dt);
-
-	  Set_GM6020_Voltage(0, debug_cmd_motor7, 0);
-	  HAL_Delay(2);
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -197,5 +233,4 @@ void assert_failed(uint8_t *file, uint32_t line)
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
-
 #endif /* USE_FULL_ASSERT */

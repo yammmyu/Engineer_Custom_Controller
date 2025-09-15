@@ -39,7 +39,7 @@ C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.external
 C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-sbrkr.o)
                               C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-mallocr.o) (_sbrk_r)
 C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libm.a(libm_a-wf_fmod.o)
-                              ./Core/Src/pid_controller.o (fmodf)
+                              ./Core/Src/pid_alg.o (fmodf)
 C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libm.a(libm_a-ef_fmod.o)
                               C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libm.a(libm_a-wf_fmod.o) (__ieee754_fmodf)
 C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/thumb/v7e-m+fp/hard\libgcc.a(_aeabi_uldivmod.o)
@@ -369,39 +369,39 @@ Discarded input sections
  .debug_macro   0x00000000      0x2aa ./Core/Src/motor.o
  .debug_macro   0x00000000      0x12d ./Core/Src/motor.o
  .debug_macro   0x00000000       0x28 ./Core/Src/motor.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .group         0x00000000        0xc ./Core/Src/pid_controller.o
- .text          0x00000000        0x0 ./Core/Src/pid_controller.o
- .data          0x00000000        0x0 ./Core/Src/pid_controller.o
- .bss           0x00000000        0x0 ./Core/Src/pid_controller.o
- .debug_macro   0x00000000      0xad8 ./Core/Src/pid_controller.o
- .debug_macro   0x00000000       0x22 ./Core/Src/pid_controller.o
- .debug_macro   0x00000000       0x8e ./Core/Src/pid_controller.o
- .debug_macro   0x00000000       0x51 ./Core/Src/pid_controller.o
- .debug_macro   0x00000000      0x103 ./Core/Src/pid_controller.o
- .debug_macro   0x00000000       0x6a ./Core/Src/pid_controller.o
- .debug_macro   0x00000000      0x1df ./Core/Src/pid_controller.o
- .debug_macro   0x00000000      0x190 ./Core/Src/pid_controller.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .group         0x00000000        0xc ./Core/Src/pid_alg.o
+ .text          0x00000000        0x0 ./Core/Src/pid_alg.o
+ .data          0x00000000        0x0 ./Core/Src/pid_alg.o
+ .bss           0x00000000        0x0 ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000      0xad8 ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000       0x22 ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000       0x8e ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000       0x51 ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000      0x103 ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000       0x6a ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000      0x1df ./Core/Src/pid_alg.o
+ .debug_macro   0x00000000      0x190 ./Core/Src/pid_alg.o
  .group         0x00000000        0xc ./Core/Src/stm32f4xx_hal_msp.o
  .group         0x00000000        0xc ./Core/Src/stm32f4xx_hal_msp.o
  .group         0x00000000        0xc ./Core/Src/stm32f4xx_hal_msp.o
@@ -3007,7 +3007,7 @@ LOAD ./Core/Src/can.o
 LOAD ./Core/Src/gpio.o
 LOAD ./Core/Src/main.o
 LOAD ./Core/Src/motor.o
-LOAD ./Core/Src/pid_controller.o
+LOAD ./Core/Src/pid_alg.o
 LOAD ./Core/Src/stm32f4xx_hal_msp.o
 LOAD ./Core/Src/stm32f4xx_it.o
 LOAD ./Core/Src/syscalls.o
@@ -3121,16 +3121,16 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x08000d68       0xac ./Core/Src/motor.o
                 0x08000d68                HAL_CAN_RxFifo0MsgPendingCallback
  .text.pid_init
-                0x08000e14       0x7c ./Core/Src/pid_controller.o
+                0x08000e14       0x7c ./Core/Src/pid_alg.o
                 0x08000e14                pid_init
- .text.clampf   0x08000e90       0x52 ./Core/Src/pid_controller.o
+ .text.clampf   0x08000e90       0x52 ./Core/Src/pid_alg.o
                 0x08000e90                clampf
  *fill*         0x08000ee2        0x2 
  .text.pid_update
-                0x08000ee4      0x1f4 ./Core/Src/pid_controller.o
+                0x08000ee4      0x1f4 ./Core/Src/pid_alg.o
                 0x08000ee4                pid_update
  .text.voltage_to_can
-                0x080010d8       0x64 ./Core/Src/pid_controller.o
+                0x080010d8       0x64 ./Core/Src/pid_alg.o
                 0x080010d8                voltage_to_can
  .text.HAL_MspInit
                 0x0800113c       0x50 ./Core/Src/stm32f4xx_hal_msp.o
@@ -3556,7 +3556,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .bss.all_motors
                 0x20000130       0x60 ./Core/Src/motor.o
                 0x20000130                all_motors
- .bss.error     0x20000190        0x4 ./Core/Src/pid_controller.o
+ .bss.error     0x20000190        0x4 ./Core/Src/pid_alg.o
                 0x20000190                error
  .bss.last_tick
                 0x20000194        0x4 ./Core/Src/timebase.o
@@ -3606,7 +3606,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .ARM.attributes
                 0x00000126       0x34 ./Core/Src/motor.o
  .ARM.attributes
-                0x0000015a       0x34 ./Core/Src/pid_controller.o
+                0x0000015a       0x34 ./Core/Src/pid_alg.o
  .ARM.attributes
                 0x0000018e       0x34 ./Core/Src/stm32f4xx_hal_msp.o
  .ARM.attributes
@@ -3665,7 +3665,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_info    0x00000e20      0x425 ./Core/Src/gpio.o
  .debug_info    0x00001245      0x747 ./Core/Src/main.o
  .debug_info    0x0000198c      0xa97 ./Core/Src/motor.o
- .debug_info    0x00002423      0x30a ./Core/Src/pid_controller.o
+ .debug_info    0x00002423      0x30a ./Core/Src/pid_alg.o
  .debug_info    0x0000272d      0x269 ./Core/Src/stm32f4xx_hal_msp.o
  .debug_info    0x00002996      0x520 ./Core/Src/stm32f4xx_it.o
  .debug_info    0x00002eb6      0x512 ./Core/Src/system_stm32f4xx.o
@@ -3685,7 +3685,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_abbrev  0x00000375      0x152 ./Core/Src/gpio.o
  .debug_abbrev  0x000004c7      0x22d ./Core/Src/main.o
  .debug_abbrev  0x000006f4      0x242 ./Core/Src/motor.o
- .debug_abbrev  0x00000936      0x13b ./Core/Src/pid_controller.o
+ .debug_abbrev  0x00000936      0x13b ./Core/Src/pid_alg.o
  .debug_abbrev  0x00000a71       0xd8 ./Core/Src/stm32f4xx_hal_msp.o
  .debug_abbrev  0x00000b49      0x190 ./Core/Src/stm32f4xx_it.o
  .debug_abbrev  0x00000cd9      0x11a ./Core/Src/system_stm32f4xx.o
@@ -3711,7 +3711,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_aranges
                 0x000000c0       0x48 ./Core/Src/motor.o
  .debug_aranges
-                0x00000108       0x38 ./Core/Src/pid_controller.o
+                0x00000108       0x38 ./Core/Src/pid_alg.o
  .debug_aranges
                 0x00000140       0x20 ./Core/Src/stm32f4xx_hal_msp.o
  .debug_aranges
@@ -3750,7 +3750,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_rnglists
                 0x00000083       0x35 ./Core/Src/motor.o
  .debug_rnglists
-                0x000000b8       0x26 ./Core/Src/pid_controller.o
+                0x000000b8       0x26 ./Core/Src/pid_alg.o
  .debug_rnglists
                 0x000000de       0x13 ./Core/Src/stm32f4xx_hal_msp.o
  .debug_rnglists
@@ -3821,21 +3821,21 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x0001e910      0x1dd ./Core/Src/gpio.o
  .debug_macro   0x0001eaed      0x21d ./Core/Src/main.o
  .debug_macro   0x0001ed0a      0x1e3 ./Core/Src/motor.o
- .debug_macro   0x0001eeed      0x11d ./Core/Src/pid_controller.o
- .debug_macro   0x0001f00a       0x61 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f06b       0x2a ./Core/Src/pid_controller.o
- .debug_macro   0x0001f095       0x43 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f0d8       0x34 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f10c      0x370 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f47c       0x16 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f492       0x4a ./Core/Src/pid_controller.o
- .debug_macro   0x0001f4dc       0x34 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f510       0x10 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f520       0x58 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f578       0x8e ./Core/Src/pid_controller.o
- .debug_macro   0x0001f606       0x1c ./Core/Src/pid_controller.o
- .debug_macro   0x0001f622      0x185 ./Core/Src/pid_controller.o
- .debug_macro   0x0001f7a7      0x19b ./Core/Src/pid_controller.o
+ .debug_macro   0x0001eeed      0x11d ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f00a       0x61 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f06b       0x2a ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f095       0x43 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f0d8       0x34 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f10c      0x370 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f47c       0x16 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f492       0x4a ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f4dc       0x34 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f510       0x10 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f520       0x58 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f578       0x8e ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f606       0x1c ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f622      0x185 ./Core/Src/pid_alg.o
+ .debug_macro   0x0001f7a7      0x19b ./Core/Src/pid_alg.o
  .debug_macro   0x0001f942      0x1d3 ./Core/Src/stm32f4xx_hal_msp.o
  .debug_macro   0x0001fb15      0x1dd ./Core/Src/stm32f4xx_it.o
  .debug_macro   0x0001fcf2      0x1c4 ./Core/Src/system_stm32f4xx.o
@@ -3848,46 +3848,46 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x000209e6      0x1e8 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
  .debug_macro   0x00020bce      0x1c5 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
-.debug_line     0x00000000     0xb9d3
- .debug_line    0x00000000      0x4c3 ./Core/Src/arm_control.o
- .debug_line    0x000004c3      0x846 ./Core/Src/can.o
- .debug_line    0x00000d09      0x73d ./Core/Src/gpio.o
- .debug_line    0x00001446      0x827 ./Core/Src/main.o
- .debug_line    0x00001c6d      0x8c0 ./Core/Src/motor.o
- .debug_line    0x0000252d      0x68f ./Core/Src/pid_controller.o
- .debug_line    0x00002bbc      0x72c ./Core/Src/stm32f4xx_hal_msp.o
- .debug_line    0x000032e8      0x80b ./Core/Src/stm32f4xx_it.o
- .debug_line    0x00003af3      0x7a2 ./Core/Src/system_stm32f4xx.o
- .debug_line    0x00004295      0x73a ./Core/Src/timebase.o
- .debug_line    0x000049cf      0x79a ./Core/Src/usart.o
- .debug_line    0x00005169       0x7a ./Core/Startup/startup_stm32f407ighx.o
- .debug_line    0x000051e3      0xa1e ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .debug_line    0x00005c01     0x11dd ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.o
- .debug_line    0x00006dde      0xcee ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .debug_line    0x00007acc      0xb76 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .debug_line    0x00008642      0xe2b ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .debug_line    0x0000946d     0x2566 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+.debug_line     0x00000000     0xb9b7
+ .debug_line    0x00000000      0x4bc ./Core/Src/arm_control.o
+ .debug_line    0x000004bc      0x846 ./Core/Src/can.o
+ .debug_line    0x00000d02      0x73d ./Core/Src/gpio.o
+ .debug_line    0x0000143f      0x820 ./Core/Src/main.o
+ .debug_line    0x00001c5f      0x8c0 ./Core/Src/motor.o
+ .debug_line    0x0000251f      0x681 ./Core/Src/pid_alg.o
+ .debug_line    0x00002ba0      0x72c ./Core/Src/stm32f4xx_hal_msp.o
+ .debug_line    0x000032cc      0x80b ./Core/Src/stm32f4xx_it.o
+ .debug_line    0x00003ad7      0x7a2 ./Core/Src/system_stm32f4xx.o
+ .debug_line    0x00004279      0x73a ./Core/Src/timebase.o
+ .debug_line    0x000049b3      0x79a ./Core/Src/usart.o
+ .debug_line    0x0000514d       0x7a ./Core/Startup/startup_stm32f407ighx.o
+ .debug_line    0x000051c7      0xa1e ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_line    0x00005be5     0x11dd ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.o
+ .debug_line    0x00006dc2      0xcee ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_line    0x00007ab0      0xb76 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_line    0x00008626      0xe2b ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_line    0x00009451     0x2566 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
-.debug_str      0x00000000    0xc556d
- .debug_str     0x00000000    0xc556d ./Core/Src/arm_control.o
-                               0x3f3c (size before relaxing)
- .debug_str     0x000c556d    0xbf99e ./Core/Src/can.o
- .debug_str     0x000c556d    0xbf190 ./Core/Src/gpio.o
- .debug_str     0x000c556d    0xbf489 ./Core/Src/main.o
- .debug_str     0x000c556d    0xbf644 ./Core/Src/motor.o
- .debug_str     0x000c556d     0x7bc8 ./Core/Src/pid_controller.o
- .debug_str     0x000c556d    0xbf0c5 ./Core/Src/stm32f4xx_hal_msp.o
- .debug_str     0x000c556d    0xbf32c ./Core/Src/stm32f4xx_it.o
- .debug_str     0x000c556d    0xbf0f1 ./Core/Src/system_stm32f4xx.o
- .debug_str     0x000c556d    0xbef4e ./Core/Src/timebase.o
- .debug_str     0x000c556d    0xbf64d ./Core/Src/usart.o
- .debug_str     0x000c556d       0x92 ./Core/Startup/startup_stm32f407ighx.o
- .debug_str     0x000c556d    0xbfc75 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
- .debug_str     0x000c556d    0xbf7eb ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.o
- .debug_str     0x000c556d    0xbf9f1 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
- .debug_str     0x000c556d    0xbf26c ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
- .debug_str     0x000c556d    0xbf525 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
- .debug_str     0x000c556d    0xbfb06 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
+.debug_str      0x00000000    0xc555f
+ .debug_str     0x00000000    0xc555f ./Core/Src/arm_control.o
+                               0x3f35 (size before relaxing)
+ .debug_str     0x000c555f    0xbf99e ./Core/Src/can.o
+ .debug_str     0x000c555f    0xbf190 ./Core/Src/gpio.o
+ .debug_str     0x000c555f    0xbf482 ./Core/Src/main.o
+ .debug_str     0x000c555f    0xbf644 ./Core/Src/motor.o
+ .debug_str     0x000c555f     0x7bba ./Core/Src/pid_alg.o
+ .debug_str     0x000c555f    0xbf0c5 ./Core/Src/stm32f4xx_hal_msp.o
+ .debug_str     0x000c555f    0xbf32c ./Core/Src/stm32f4xx_it.o
+ .debug_str     0x000c555f    0xbf0f1 ./Core/Src/system_stm32f4xx.o
+ .debug_str     0x000c555f    0xbef4e ./Core/Src/timebase.o
+ .debug_str     0x000c555f    0xbf64d ./Core/Src/usart.o
+ .debug_str     0x000c555f       0x92 ./Core/Startup/startup_stm32f407ighx.o
+ .debug_str     0x000c555f    0xbfc75 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
+ .debug_str     0x000c555f    0xbf7eb ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_can.o
+ .debug_str     0x000c555f    0xbf9f1 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
+ .debug_str     0x000c555f    0xbf26c ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
+ .debug_str     0x000c555f    0xbf525 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o
+ .debug_str     0x000c555f    0xbfb06 ./Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.o
 
 .comment        0x00000000       0x43
  .comment       0x00000000       0x43 ./Core/Src/arm_control.o
@@ -3896,7 +3896,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .comment       0x00000043       0x44 ./Core/Src/gpio.o
  .comment       0x00000043       0x44 ./Core/Src/main.o
  .comment       0x00000043       0x44 ./Core/Src/motor.o
- .comment       0x00000043       0x44 ./Core/Src/pid_controller.o
+ .comment       0x00000043       0x44 ./Core/Src/pid_alg.o
  .comment       0x00000043       0x44 ./Core/Src/stm32f4xx_hal_msp.o
  .comment       0x00000043       0x44 ./Core/Src/stm32f4xx_it.o
  .comment       0x00000043       0x44 ./Core/Src/system_stm32f4xx.o
@@ -3915,7 +3915,7 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_frame   0x00000130       0x34 ./Core/Src/gpio.o
  .debug_frame   0x00000164       0x70 ./Core/Src/main.o
  .debug_frame   0x000001d4       0xf0 ./Core/Src/motor.o
- .debug_frame   0x000002c4       0xac ./Core/Src/pid_controller.o
+ .debug_frame   0x000002c4       0xac ./Core/Src/pid_alg.o
  .debug_frame   0x00000370       0x38 ./Core/Src/stm32f4xx_hal_msp.o
  .debug_frame   0x000003a8      0x13c ./Core/Src/stm32f4xx_it.o
  .debug_frame   0x000004e4       0x58 ./Core/Src/system_stm32f4xx.o

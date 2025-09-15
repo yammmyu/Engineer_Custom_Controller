@@ -1,5 +1,5 @@
+#include <pid_alg.h>
 #include "arm_control.h"
-#include "pid_controller.h"
 
 // PID instances for the joint
 static PID_t pid_pos;

@@ -1,4 +1,4 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/pid_controller.h \
+Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/pid_alg.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -29,7 +29,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/pid_controller.h \
  ../Core/Inc/can.h ../Core/Inc/main.h ../Core/Inc/usart.h \
  ../Core/Inc/gpio.h ../Core/Inc/motor.h ../Core/Inc/arm_control.h \
  ../Core/Inc/timebase.h
-../Core/Inc/pid_controller.h:
+../Core/Inc/pid_alg.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
