@@ -30,6 +30,7 @@
 #include "timebase.h"
 #include "dvc_serialplot.h"
 #include "dvc_motor.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,40 +68,20 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-/**
- * @brief HAL库UART接收DMA空闲中断
- *
- * @param huart UART编号
- * @param Size 长度
- */
-void UART_Serialplot_Call_Back(uint8_t *Buffer, uint16_t Length)
-{
-    serialplot.UART_RxCpltCallback(Buffer);
-    switch (serialplot.Get_Variable_Index())
-    {
-        // 电机调PID
-        case(0):
-        {
-            motor_3508.PID_Omega.Set_K_P(serialplot.Get_Variable_Value());
-        }
-        break;
-        case(1):
-        {
-            motor_3508.PID_Omega.Set_K_I(serialplot.Get_Variable_Value());
-        }
-        break;
-        case(2):
-        {
-            motor_3508.PID_Omega.Set_K_D(serialplot.Get_Variable_Value());
-        }
-        break;
-        case(3):
-        {
-            motor_3508.PID_Omega.Set_K_F(serialplot.Get_Variable_Value());
-        }
-        break;
-    }
-}
+extern UART_HandleTypeDef huart2;
+
+// Serialplot object
+Class_Serialplot serialplot;
+
+// PID controller instance
+pid_t motor_pid;
+
+// Buffers for data to plot
+float pid_out;
+float pid_error;
+float pid_integral;
+float pid_now;
+float pid_target;
 /* USER CODE END 0 */
 
 /**
@@ -139,6 +120,12 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
+  MX_TIM2_Init();
+
+  // --- Initialize Serialplot ---
+  serialplot.Init(&huart2, 0, NULL, Serialplot_Data_Type_FLOAT, 0xAA);
+
+  serialplot.Set_Data(5, &pid_out, &pid_error, &pid_integral, &pid_now, &pid_target);
   /* USER CODE END 2 */
 
   /* Infinite loop */
