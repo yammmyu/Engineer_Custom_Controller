@@ -380,7 +380,7 @@ void Class_Motor_GM6020::CAN_RxCpltCallback(uint8_t *Rx_Data)
     }
     else if (delta_encoder > 4096)
     {
-        //反方向转过了一圈
+        //One Round Anti Clockwise
         Total_Round--;
     }
     Total_Encoder = Total_Round * Encoder_Num_Per_Round + Rx_Encoder + Encoder_Offset;
@@ -392,15 +392,15 @@ void Class_Motor_GM6020::CAN_RxCpltCallback(uint8_t *Rx_Data)
 }
 
 /**
- * @brief TIM定时器中断定期检测电机是否存活
+ * @brief TIM interrupts checkin if the motor is still alive
  *
  */
 void Class_Motor_GM6020::TIM_Alive_PeriodElapsedCallback()
 {
-    //判断该时间段内是否接收过电机数据
-    if (Flag == Pre_Flag)
+    //Determine if the Motor has received a message
+    if (Flag == Pre_Flag) //If there is no change in Flag
     {
-        //电机断开连接
+        //Then motor has lost connection
         CAN_Motor_Status = CAN_Motor_Status_DISABLE;
         PID_Angle.Set_Integral_Error(0.0f);
         PID_Omega.Set_Integral_Error(0.0f);
@@ -408,14 +408,14 @@ void Class_Motor_GM6020::TIM_Alive_PeriodElapsedCallback()
     }
     else
     {
-        //电机保持连接
+        //Motor is still connected
         CAN_Motor_Status = CAN_Motor_Status_ENABLE;
     }
     Pre_Flag = Flag;
 }
 
 /**
- * @brief TIM定时器中断计算回调函数
+ * @brief TIM timer interrupt callback function
  *
  */
 void Class_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
@@ -424,7 +424,7 @@ void Class_Motor_GM6020::TIM_PID_PeriodElapsedCallback()
     {
     case (Control_Method_OPENLOOP):
     {
-        //默认开环速度控制
+        //Deafault openloop speed
         Set_Out(Target_Omega / Omega_Max * Output_Max);
     }
     break;
