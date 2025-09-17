@@ -156,20 +156,15 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    CAN_RxHeaderTypeDef rx_header;
-    uint8_t rx_data[8];
+    CAN_RxHeaderTypeDef rxHeader;
+    uint8_t rxData[8];
 
-    HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);  // 👈 Debug indicator
-
-    if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data) == HAL_OK)
+    if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxHeader, rxData) == HAL_OK)
     {
-        HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);  // 👈 Debug indicator
-
-        int8_t idx = motor_index_from_id(rx_header.StdId);
-        if (idx >= 0)
-        {
-            get_motor_measure(&all_motors[idx], rx_data);
-            all_motors[idx].angle_deg = (all_motors[idx].ecd / 8192.0f) * 360.0f;
-        }
+        // Forward CAN frame to motor manager
+        Motor_RxCallback(&motor1, rxData, rxHeader.StdId);
+        Motor_RxCallback(&motor2, rxData, rxHeader.StdId);
+        // repeat for all active motors
     }
 }
+

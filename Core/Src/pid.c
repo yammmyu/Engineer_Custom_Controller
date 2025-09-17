@@ -107,13 +107,14 @@ void pid_tick(pid_t *pid)
         }
     }
 
+
     // No Integral Separation or Within Separation Threshold
     if (pid->i_sep_threshold == 0.0f || (abs_error < pid->i_sep_threshold))
     {
         pid->integral_error += speed_ratio * error * pid->dt;
-
         /* Integral clamp */
-        if (pid->i_out_max != 0.0f) {
+        if (pid->i_out_max != 0.0f) 
+        {
             if (pid->integral_error > pid->i_out_max) pid->integral_error = pid->i_out_max;
             if (pid->integral_error < -pid->i_out_max) pid->integral_error = -pid->i_out_max;
         }
@@ -121,28 +122,34 @@ void pid_tick(pid_t *pid)
         I = pid->Ki * pid->integral_error;
     }
 
-    /* Derivative */
-    if (pid->d_mode == PID_D_FIRST_ENABLE) {
 
+    /* Derivative */
+    if (pid->d_mode == PID_D_FIRST_ENABLE) 
+    {
         // Derivative First
         D = pid->Kd * (pid->now - pid->prev_now) / pid->dt;
-    } else {
-
+    } else 
+    {
         // No Derivative First
         D = pid->Kd * (error - pid->prev_error) / pid->dt;
     }
 
+
     /* Feedforward */
     float F = pid->Kf * (pid->target - pid->prev_target);
+
 
     /* Output sum */
     pid->out = P + I - D + F;
 
+
     /* Output clamp */
-    if (pid->out_max != 0.0f) {
+    if (pid->out_max != 0.0f) 
+    {
         if (pid->out > pid->out_max) pid->out = pid->out_max;
         if (pid->out < -pid->out_max) pid->out = -pid->out_max;
     }
+
 
     /* Save state */
     pid->prev_error = error;
@@ -151,10 +158,12 @@ void pid_tick(pid_t *pid)
     pid->prev_out = pid->out;
 }
 
-float pid_get_out(const pid_t *pid) {
+float pid_get_out(const pid_t *pid) 
+{
     return pid->out;
 }
 
-float pid_get_integral(const pid_t *pid) {
+float pid_get_integral(const pid_t *pid) 
+{
     return pid->integral_error;
 }
