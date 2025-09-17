@@ -35,11 +35,13 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+UART_HandleTypeDef huart2;
+UART_Manage_t uart2_mgr;   // one per UART
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+Serialplot_t plot;
 volatile int16_t debug_cmd_motor7 = 0;
 /* USER CODE END PD */
 
@@ -51,13 +53,7 @@ volatile int16_t debug_cmd_motor7 = 0;
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-static char Variable_Assignment_List[][SERIALPLOT_RX_VARIABLE_ASSIGNMENT_MAX_LENGTH] = {
-    //电机调PID
-    "po",
-    "io",
-    "do",
-    "fo",
-};
+float var1, var2, var3;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -68,20 +64,6 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-extern UART_HandleTypeDef huart2;
-
-// Serialplot object
-Class_Serialplot serialplot;
-
-// PID controller instance
-pid_t motor_pid;
-
-// Buffers for data to plot
-float pid_out;
-float pid_error;
-float pid_integral;
-float pid_now;
-float pid_target;
 /* USER CODE END 0 */
 
 /**
@@ -123,9 +105,15 @@ int main(void)
   MX_TIM2_Init();
 
   // --- Initialize Serialplot ---
-  serialplot.Init(&huart2, 0, NULL, Serialplot_Data_Type_FLOAT, 0xAA);
+    Serialplot_Init(&plot,
+                    &huart2,
+                    &uart2_mgr,
+                    0, NULL,  // no rx dictionary
+                    Serialplot_Data_Type_FLOAT,
+                    0xAA);
 
-  serialplot.Set_Data(5, &pid_out, &pid_error, &pid_integral, &pid_now, &pid_target);
+    Serialplot_SetData(&plot, 3, &var1, &var2, &var3);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -133,7 +121,12 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    var1 += 0.1f;
+    var2 += 0.2f;
+    var3 += 0.3f;
 
+    Serialplot_TIM_PeriodElapsedCallback(&plot);
+    HAL_Delay(10);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

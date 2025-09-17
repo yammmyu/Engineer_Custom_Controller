@@ -4,7 +4,7 @@
  * @author yammmyu
  * @date 09-2025
  *
- * @copyright Calibur Robotics (c) 2025
+ * @copyright NUS Calibur Robotics (c) 2025
  */
 
 

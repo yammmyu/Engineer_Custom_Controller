@@ -193,7 +193,7 @@ protected:
 };
 
 /**
- * @brief C610Brush-Less Motor Driver, has a built in torque loop, MCU outputs torque
+ * @brief C610 Brush-Less Motor Driver, has a built in torque loop, MCU outputs torque
  *
  */
 class Class_Motor_C610

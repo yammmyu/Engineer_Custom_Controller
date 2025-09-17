@@ -1,24 +1,30 @@
 /**
  * @file pid.h
- * @brief Lightweight PID controller for Engineer Custom Controller
+ * @brief Lightweight SerialPlot
  * @author yammmyu
  * @date 09-2025
  *
- * @copyright Calibur Robotics (c) 2025
+ * @copyright NUS Calibur Robotics (c) 2025
  */
 
 #include "dvc_serialplot.h"
 #include <string.h>
 #include <math.h>
 
-/* ----------------- Internal helpers ------------------ */
+/* ---------------- Internal helper functions ---------------- */
 
+/**
+ * @brief Parse variable name from RX buffer and match against dictionary.
+ * 
+ * @param obj Serialplot object
+ * @return position of '=' + 1 (start of value string)
+ */
 static uint8_t Serialplot_JudgeVariableName(Serialplot_t *obj)
 {
     char tmp_variable_name[SERIALPLOT_RX_VARIABLE_ASSIGNMENT_MAX_LENGTH];
     int flag = 0;
 
-    // copy until '='
+    // Copy characters until '=' or end of string
     while (obj->uart_mgr->Rx_Buffer[flag] != '=' &&
            obj->uart_mgr->Rx_Buffer[flag] != '\0')
     {
@@ -27,38 +33,48 @@ static uint8_t Serialplot_JudgeVariableName(Serialplot_t *obj)
     }
     tmp_variable_name[flag] = '\0';
 
+    // Compare against variable dictionary
     for (int i = 0; i < obj->uart_rx_variable_num; i++) {
         if (strcmp(tmp_variable_name, obj->uart_rx_variable_list[i]) == 0) {
             obj->variable_index = i;
-            return (uint8_t)(flag + 1);
+            return (uint8_t)(flag + 1); // return index of value start
         }
     }
 
+    // If not found, mark as invalid
     obj->variable_index = -1;
     return (uint8_t)(flag + 1);
 }
 
+/**
+ * @brief Parse numeric value (float-like) after variable name.
+ * 
+ * Supports negative sign and decimal point.
+ */
 static void Serialplot_JudgeVariableValue(Serialplot_t *obj, int flag)
 {
     int tmp_dot_flag = 0, tmp_sign = 1, i;
     obj->variable_value = 0.0;
 
+    // Skip if variable was not recognized
     if (obj->variable_index == -1) {
-        return; // unknown variable, skip
+        return;
     }
 
+    // Handle negative sign
     if (obj->uart_mgr->Rx_Buffer[flag] == '-') {
         tmp_sign = -1;
         flag++;
     }
 
+    // Parse number until '#' or null terminator
     for (i = flag;
          obj->uart_mgr->Rx_Buffer[i] != '#' &&
          obj->uart_mgr->Rx_Buffer[i] != '\0';
          i++)
     {
         if (obj->uart_mgr->Rx_Buffer[i] == '.') {
-            tmp_dot_flag = i;
+            tmp_dot_flag = i; // mark decimal point
         } else {
             obj->variable_value =
                 obj->variable_value * 10.0 +
@@ -66,14 +82,16 @@ static void Serialplot_JudgeVariableValue(Serialplot_t *obj, int flag)
         }
     }
 
+    // Apply decimal scaling if '.' was present
     if (tmp_dot_flag != 0) {
         obj->variable_value /= pow(10.0, (double)(i - tmp_dot_flag - 1));
     }
 
+    // Apply sign
     obj->variable_value *= tmp_sign;
 }
 
-/* ----------------- Public API ------------------ */
+/* ---------------- Public API ---------------- */
 
 void Serialplot_Init(Serialplot_t *obj,
                      UART_HandleTypeDef *huart,
@@ -94,6 +112,7 @@ void Serialplot_Init(Serialplot_t *obj,
     obj->variable_value = 0.0;
     obj->data_number = 0;
 
+    // Initialize TX buffer with frame header
     memset(obj->uart_mgr->Tx_Buffer, 0, SERIALPLOT_MAX_BUFFER);
     obj->uart_mgr->Tx_Buffer[0] = frame_header;
 }
@@ -103,7 +122,10 @@ void Serialplot_SetData(Serialplot_t *obj, uint8_t num, ...)
     va_list args;
     va_start(args, num);
 
+    // Limit to maximum allowed data pointers
     if (num > SERIALPLOT_MAX_DATA_PTRS) num = SERIALPLOT_MAX_DATA_PTRS;
+
+    // Store variable pointers
     for (int i = 0; i < num; i++) {
         obj->data[i] = va_arg(args, void *);
     }
@@ -114,9 +136,11 @@ void Serialplot_SetData(Serialplot_t *obj, uint8_t num, ...)
 
 void Serialplot_Output(Serialplot_t *obj)
 {
+    // Clear TX buffer and place frame header
     memset(obj->uart_mgr->Tx_Buffer, 0, SERIALPLOT_MAX_BUFFER);
     obj->uart_mgr->Tx_Buffer[0] = obj->frame_header;
 
+    // Fill TX buffer with data depending on chosen type
     if (obj->tx_data_type == Serialplot_Data_Type_UINT8 ||
         obj->tx_data_type == Serialplot_Data_Type_INT8) {
         for (int i = 0; i < obj->data_number; i++) {
@@ -159,11 +183,13 @@ double Serialplot_GetVariableValue(Serialplot_t *obj)
 
 void Serialplot_UART_RxCpltCallback(Serialplot_t *obj, uint8_t *rx_data)
 {
+    // Parse "var=value#" string from RX buffer
     int flag = Serialplot_JudgeVariableName(obj);
     Serialplot_JudgeVariableValue(obj, flag);
 }
 
 void Serialplot_TIM_PeriodElapsedCallback(Serialplot_t *obj)
 {
+    // Update TX buffer with latest data
     Serialplot_Output(obj);
 }
