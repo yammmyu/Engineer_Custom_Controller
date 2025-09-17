@@ -1,108 +1,74 @@
 /**
- * @file dvc_motor.h
- * @author yssickjgd (1345578933@qq.com)
- * @brief 串口绘图
- * @version 0.1
- * @date 2022-08-07
+ * @file pid.h
+ * @brief Lightweight PID controller for Engineer Custom Controller
+ * @author yammmyu
+ * @date 09-2025
  *
- * @copyright USTC-RoboWalker (c) 2022
- *
+ * @copyright Calibur Robotics (c) 2025
  */
-
 #ifndef DVC_SERIALPLOT_H
 #define DVC_SERIALPLOT_H
 
-/* Includes ------------------------------------------------------------------*/
-
+#include "stm32f4xx_hal.h"   // adjust series for your MCU
+#include <stdint.h>
 #include <stdarg.h>
-#include <string.h>
-#include <math.h>
-#include "drv_uart.h"
 
-/* Exported macros -----------------------------------------------------------*/
+#define SERIALPLOT_MAX_DATA_PTRS  12
+#define SERIALPLOT_MAX_BUFFER     256
+#define SERIALPLOT_RX_VARIABLE_ASSIGNMENT_MAX_LENGTH 32
 
-//串口绘图单条指令最大长度
-#define SERIALPLOT_RX_VARIABLE_ASSIGNMENT_MAX_LENGTH (100)
-
-/* Exported types ------------------------------------------------------------*/
-
-/**
- * @brief 串口绘图传输数据类型
- *
- */
-enum Enum_Serialplot_Data_Type
-{
-    Serialplot_Data_Type_UINT8 = 0,
-    Serialplot_Data_Type_UINT16,
-    Serialplot_Data_Type_UINT32,
+// Supported data types
+typedef enum {
+    Serialplot_Data_Type_UINT8,
     Serialplot_Data_Type_INT8,
+    Serialplot_Data_Type_UINT16,
     Serialplot_Data_Type_INT16,
+    Serialplot_Data_Type_UINT32,
     Serialplot_Data_Type_INT32,
     Serialplot_Data_Type_FLOAT,
-    Serialplot_Data_Type_DOUBLE,
-};
+    Serialplot_Data_Type_DOUBLE
+} Serialplot_Data_Type_t;
 
-/**
- * @brief 串口绘图工具, 最多支持12个通道
- *
- */
-class Class_Serialplot
-{
-public:
-    void Init(UART_HandleTypeDef *huart, uint8_t __Serialplot_Rx_Variable_Assignment_Num = 0, char **__Serialplot_Rx_Variable_Assignment_List = NULL, Enum_Serialplot_Data_Type __Serialplot_Data_Type = Serialplot_Data_Type_FLOAT, uint8_t __Frame_Header = 0xab);
+// UART manager struct (simplified version)
+typedef struct {
+    uint8_t Rx_Buffer[SERIALPLOT_MAX_BUFFER];
+    uint8_t Tx_Buffer[SERIALPLOT_MAX_BUFFER];
+} UART_Manage_t;
 
-    int8_t Get_Variable_Index();
-    double Get_Variable_Value();
+// Main serialplot struct
+typedef struct {
+    UART_HandleTypeDef *huart;
+    UART_Manage_t *uart_mgr;
 
-    void Set_Data(uint8_t Number, ...);
+    uint8_t uart_rx_variable_num;
+    char **uart_rx_variable_list;
 
-    void UART_RxCpltCallback(uint8_t *Rx_Data);
-    void TIM_Write_PeriodElapsedCallback();
+    Serialplot_Data_Type_t tx_data_type;
+    uint8_t frame_header;
 
-protected:
-    //初始化相关常量
+    int8_t variable_index;
+    double variable_value;
 
-    //绑定的UART
-    Struct_UART_Manage_Object *UART_Manage_Object;
-    //接收指令字典的数量
-    uint8_t UART_Rx_Variable_Num;
-    //接收指令字典列表指针
-    char **UART_Rx_Variable_List;
-    //串口绘图数据类型
-    Enum_Serialplot_Data_Type UART_Tx_Data_Type;
-    //数据包头标
-    uint8_t Frame_Header;
+    void *data[SERIALPLOT_MAX_DATA_PTRS];
+    uint8_t data_number;
+} Serialplot_t;
 
-    //常量
+/* API */
+void Serialplot_Init(Serialplot_t *obj,
+                     UART_HandleTypeDef *huart,
+                     UART_Manage_t *uart_mgr,
+                     uint8_t rx_var_num,
+                     char **rx_var_list,
+                     Serialplot_Data_Type_t tx_type,
+                     uint8_t frame_header);
 
-    //内部变量
+void Serialplot_SetData(Serialplot_t *obj, uint8_t num, ...);
+void Serialplot_Output(Serialplot_t *obj);
 
-    //需要绘图的各个变量数据地址
-    const void *Data[12];
-    //当前发送的数据长度, 等价于新数据偏移量
-    uint8_t Data_Number = 0;
-    //当前接收的指令在指令字典中的编号
-    int8_t Variable_Index = 0;
-    //当前接收的指令在指令字典中的值
-    float Variable_Value = 0.0f;
+int8_t Serialplot_GetVariableIndex(Serialplot_t *obj);
+double Serialplot_GetVariableValue(Serialplot_t *obj);
 
-    //读变量
+void Serialplot_UART_RxCpltCallback(Serialplot_t *obj, uint8_t *rx_data);
+void Serialplot_TIM_PeriodElapsedCallback(Serialplot_t *obj);
 
-    //写变量
-
-    //读写变量
-
-    //内部函数
-
-    uint8_t Judge_Variable_Name();
-    void Judge_Variable_Value(int flag);
-    void Output();
-};
-
-/* Exported variables --------------------------------------------------------*/
-
-/* Exported function declarations --------------------------------------------*/
-
-#endif
-
-/************************ COPYRIGHT(C) USTC-ROBOWALKER **************************/
+#endif // DVC_SERIALPLOT_H
