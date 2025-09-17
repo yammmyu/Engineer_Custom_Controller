@@ -1,3 +1,13 @@
+/**
+ * @file pid.c
+ * @brief Lightweight PID controller for Engineer Custom Controller
+ * @author yammmyu
+ * @date 09-2025
+ *
+ * @copyright Calibur Robotics (c) 2025
+ */
+
+
 #include "pid.h"
 
 /**
@@ -18,7 +28,7 @@ void pid_init(pid_t *pid,
     pid->dead_zone = dead_zone;
     pid->d_mode = d_mode;
 
-    pid->i_max = i_max;
+    pid->i_out_max = i_max;
     pid->out_max = out_max;
     pid->i_var_a = i_var_a;
     pid->i_var_b = i_var_b;
@@ -26,7 +36,7 @@ void pid_init(pid_t *pid,
 
     pid->target = 0.0f;
     pid->now = 0.0f;
-    pid->integral = 0.0f;
+    pid->integral_error = 0.0f;
     pid->prev_error = 0.0f;
     pid->prev_now = 0.0f;
     pid->prev_target = 0.0f;
@@ -43,63 +53,93 @@ void pid_set_now(pid_t *pid, float now) {
 }
 
 void pid_reset_integral(pid_t *pid) {
-    pid->integral = 0.0f;
+    pid->integral_error = 0.0f;
 }
 
+
 /**
- * @brief Run one PID update step
+ * @brief Run one PID update Calculation
+ * 
+ * @return PID output
  */
 void pid_tick(pid_t *pid)
 {
+    float P = 0.0f, I = 0.0f, D = 0.0f, F = 0.0f;
+    
     float error = pid->target - pid->now;
 
+    float abs_error = error > 0 ? error : -error;
+
+    float speed_ratio;
+
     /* Dead zone */
-    if (pid->dead_zone > 0.0f && (error > -pid->dead_zone && error < pid->dead_zone)) {
-        pid->out = 0.0f;
-        return;
+    if (abs_error < pid->dead_zone)
+    {
+        error = 0.0f;
+        abs_error = 0.0f;
     }
 
     /* Proportional */
-    float P = pid->Kp * error;
+    P = pid->Kp * error;
 
-    /* Integral with separation and variable speed */
-    if (pid->i_sep_threshold == 0.0f || (error > -pid->i_sep_threshold && error < pid->i_sep_threshold)) {
-        pid->integral += pid->Ki * error * pid->dt;
-
-        /* Variable speed integral scaling */
-        if (pid->i_var_a > 0 && pid->i_var_b > pid->i_var_a) {
-            if (error > pid->i_var_a && error < pid->i_var_b) {
-                float scale = (pid->i_var_b - error) / (pid->i_var_b - pid->i_var_a);
-                pid->integral *= scale;
-            } else if (error >= pid->i_var_b) {
-                pid->integral = 0.0f;
-            }
+    // Integral with separation and variable speed
+    if (pid->i_var_a == 0.0f && pid->i_var_b == 0.0f)
+    {
+        // Not Variable Speed Integral
+        speed_ratio = 1.0f;
+    }
+    else
+    {
+        if (abs_error <= pid->i_var_a)
+        {
+            // Full gain zone
+            speed_ratio = 1.0f;
         }
+        else if (abs_error < pid->i_var_b)
+        {
+            // Fade-out zone (linear)
+            speed_ratio = (pid->i_var_b - abs_error) / (pid->i_var_b - pid->i_var_a);
+        }
+        else
+        {
+            // No gain zone
+            speed_ratio = 0.0f;
+        }
+    }
+
+    // No Integral Separation or Within Separation Threshold
+    if (pid->i_sep_threshold == 0.0f || (abs_error < pid->i_sep_threshold))
+    {
+        pid->integral_error += speed_ratio * error * pid->dt;
 
         /* Integral clamp */
-        if (pid->i_max > 0.0f) {
-            if (pid->integral > pid->i_max) pid->integral = pid->i_max;
-            if (pid->integral < -pid->i_max) pid->integral = -pid->i_max;
+        if (pid->i_out_max != 0.0f) {
+            if (pid->integral_error > pid->i_out_max) pid->integral_error = pid->i_out_max;
+            if (pid->integral_error < -pid->i_out_max) pid->integral_error = -pid->i_out_max;
         }
+
+        I = pid->Ki * pid->integral_error;
     }
 
     /* Derivative */
-    float derivative;
     if (pid->d_mode == PID_D_FIRST_ENABLE) {
-        derivative = (pid->now - pid->prev_now) / pid->dt;
+
+        // Derivative First
+        D = pid->Kd * (pid->now - pid->prev_now) / pid->dt;
     } else {
-        derivative = (error - pid->prev_error) / pid->dt;
+
+        // No Derivative First
+        D = pid->Kd * (error - pid->prev_error) / pid->dt;
     }
-    float D = pid->Kd * derivative;
 
     /* Feedforward */
-    float F = pid->Kf * pid->target;
+    float F = pid->Kf * (pid->target - pid->prev_target);
 
     /* Output sum */
-    pid->out = P + pid->integral - D + F;
+    pid->out = P + I - D + F;
 
     /* Output clamp */
-    if (pid->out_max > 0.0f) {
+    if (pid->out_max != 0.0f) {
         if (pid->out > pid->out_max) pid->out = pid->out_max;
         if (pid->out < -pid->out_max) pid->out = -pid->out_max;
     }
@@ -116,5 +156,5 @@ float pid_get_out(const pid_t *pid) {
 }
 
 float pid_get_integral(const pid_t *pid) {
-    return pid->integral;
+    return pid->integral_error;
 }
