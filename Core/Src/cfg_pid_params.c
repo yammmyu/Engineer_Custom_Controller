@@ -1,12 +1,5 @@
-// pid_params.c
-#include "pid_params.h"
-
-/*
- * Defaults — adjust for your machine.
- * These variables are intentionally non-const so you can edit them in the debugger.
- */
-
-#include "pid_params.h"
+#include "cfg_pid_params.h"
+#include "dvc_motor_config.h"
 
 /*
  * Defaults — adjust for your machine.

@@ -10,7 +10,7 @@
 
 #include "stm32f4xx_hal.h"
 #include <stdint.h>
-#include "pid.h"
+#include "alg_pid.h"
 
 /* ---------------- Constants ---------------- */
 

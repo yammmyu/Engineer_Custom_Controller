@@ -1,7 +1,7 @@
 #include "dvc_motor.h"
 #include <string.h>
-#include "pid_params.h"
-#include "pid.h"
+#include "cfg_pid_params.h"
+#include "alg_pid.h"
 #include <math.h>   // for lroundf if needed
 
 

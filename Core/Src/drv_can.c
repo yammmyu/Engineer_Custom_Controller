@@ -1,6 +1,9 @@
 
 #include "main.h"
-#include "motor.h"
+#include "drv_can.h"
+#include "dvc_motor.h"
+#include "dvc_motor_config.h"
+
 #ifndef PI
 #define PI (3.1415927f)
 #endif
@@ -134,10 +137,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
     if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rxHeader, rxData) == HAL_OK)
     {
-        // Forward CAN frame to motor manager
-        Motor_RxCallback(&motor1, rxData, rxHeader.StdId);
-        Motor_RxCallback(&motor2, rxData, rxHeader.StdId);
-        // repeat for all active motors
+        int idx = motor_index_from_id(rxHeader.StdId);
+        if (idx >= 0 && idx < MOTOR_COUNT)
+        {
+            Motor_CAN_RxCpltCallback(&motors[idx], rxData);
+        }
     }
 }
-
