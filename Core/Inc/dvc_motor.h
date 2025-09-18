@@ -1,7 +1,7 @@
 /**
  * @file dvc_motor.h
  * @brief CAN motor configuration and operation (C version)
- * @author
+ * @author yammmyu
  * @date 2025-09-17
  */
 
@@ -10,6 +10,7 @@
 
 #include "stm32f4xx_hal.h"
 #include <stdint.h>
+#include "pid.h"
 
 /* ---------------- Constants ---------------- */
 
@@ -34,7 +35,7 @@ typedef enum {
 
 // Example CAN motor IDs (extend as needed)
 typedef enum {
-    CAN_Motor_ID_0x201 = 0x201,
+    CAN_Motor_ID_0x201,
     CAN_Motor_ID_0x202,
     CAN_Motor_ID_0x203,
     CAN_Motor_ID_0x204,
@@ -92,6 +93,11 @@ typedef struct {
     // Limits
     uint16_t Output_Max;   ///< Maximum output value
     uint16_t Encoder_Num_Per_Round; ///< Encoder counts per revolution
+
+    // PID controllers
+    pid_t PID_Angle;   ///< Outer loop (angle control)
+    pid_t PID_Omega;   ///< Inner loop (speed control)
+    pid_t PID_Torque;  ///< Optional torque control
 } Motor_t;
 
 /* ---------------- API Functions ---------------- */

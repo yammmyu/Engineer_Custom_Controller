@@ -1,5 +1,9 @@
 #include "dvc_motor.h"
 #include <string.h>
+#include "pid_params.h"
+#include "pid.h"
+#include <math.h>   // for lroundf if needed
+
 
 /* ---------------- Internal Helpers ---------------- */
 
@@ -118,24 +122,31 @@ void Motor_TIM_PID_PeriodElapsedCallback(Motor_t *motor)
 {
     switch (motor->Control_Method) {
     case Control_Method_OPENLOOP:
+        // Open-loop: directly scale torque to output
         motor->Out = motor->Target_Torque / motor->Torque_Max * motor->Output_Max;
         break;
 
     case Control_Method_TORQUE:
+        // Torque control: directly scale torque to output
         motor->Out = motor->Target_Torque / motor->Torque_Max * motor->Output_Max;
         break;
 
     case Control_Method_OMEGA:
-        // TODO: Integrate with PID_Omega here
+        // Speed control: PID_Omega already clamps output inside pid_tick()
+        pid_tick(&motor->PID_Omega);
+        motor->Out = pid_get_out(&motor->PID_Omega);
         break;
 
     case Control_Method_ANGLE:
-        // TODO: Integrate with PID_Angle + PID_Omega here
+        // Double-loop control: angle PID outputs target speed, which feeds into speed PID
+        pid_tick(&motor->PID_Angle);
+        pid_set_target(&motor->PID_Omega, pid_get_out(&motor->PID_Angle));
+        pid_tick(&motor->PID_Omega);
+        motor->Out = pid_get_out(&motor->PID_Omega);
         break;
 
     default:
         motor->Out = 0.0f;
         break;
     }
-    Motor_Output(motor);
 }

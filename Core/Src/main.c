@@ -26,7 +26,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "motor.h"
-#include "arm_control.h"
 #include "timebase.h"
 #include "dvc_serialplot.h"
 #include "dvc_motor.h"
