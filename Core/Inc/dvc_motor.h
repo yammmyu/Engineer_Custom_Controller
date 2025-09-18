@@ -8,7 +8,6 @@
 #ifndef DVC_MOTOR_H
 #define DVC_MOTOR_H
 
-#include "stm32f4xx_hal.h"
 #include <stdint.h>
 #include "alg_pid.h"
 
@@ -33,7 +32,7 @@ typedef enum {
     CAN_Motor_Status_ENABLE
 } Enum_CAN_Motor_Status;
 
-// Example CAN motor IDs (extend as needed)
+// All CAN motor IDs
 typedef enum {
     CAN_Motor_ID_0x201,
     CAN_Motor_ID_0x202,
