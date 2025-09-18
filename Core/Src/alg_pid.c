@@ -8,7 +8,7 @@
  */
 
 
-#include "pid.h"
+#include <alg_pid.h>
 
 /**
  * @brief Initialize PID controller

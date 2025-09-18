@@ -2,7 +2,7 @@
 #ifndef PID_PARAMS_H
 #define PID_PARAMS_H
 
-#include "pid.h"   // your existing pid_t and pid API
+#include <alg_pid.h>   // your existing pid_t and pid API
 #include <stdint.h>
 
 #define MOTOR_COUNT 6

@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <drv_can.h>
 #include "main.h"
 #include "can.h"
 #include "dma.h"
@@ -25,11 +26,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "motor.h"
 #include "timebase.h"
 #include "dvc_serialplot.h"
 #include "dvc_motor.h"
-#include "pid.h"
+#include "alg_pid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
