@@ -1,5 +1,5 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/pid_alg.h \
- ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
@@ -26,10 +26,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/pid_alg.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/can.h ../Core/Inc/main.h ../Core/Inc/usart.h \
- ../Core/Inc/gpio.h ../Core/Inc/motor.h ../Core/Inc/arm_control.h \
- ../Core/Inc/timebase.h
-../Core/Inc/pid_alg.h:
+ ../Core/Inc/can.h ../Core/Inc/main.h ../Core/Inc/dma.h \
+ ../Core/Inc/usart.h ../Core/Inc/gpio.h ../Core/Inc/dvc_timebase.h \
+ ../Core/Inc/dvc_serialplot.h ../Core/Inc/dvc_motor.h \
+ ../Core/Inc/alg_pid.h ../Core/Inc/alg_pid.h \
+ ../Core/Inc/dvc_motor_config.h ../Core/Inc/dvc_motor.h \
+ ../Core/Inc/cfg_pid_params.h ../Core/Inc/dvc_motor_config.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -60,8 +62,15 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/pid_alg.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Core/Inc/can.h:
 ../Core/Inc/main.h:
+../Core/Inc/dma.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/gpio.h:
-../Core/Inc/motor.h:
-../Core/Inc/arm_control.h:
-../Core/Inc/timebase.h:
+../Core/Inc/dvc_timebase.h:
+../Core/Inc/dvc_serialplot.h:
+../Core/Inc/dvc_motor.h:
+../Core/Inc/alg_pid.h:
+../Core/Inc/alg_pid.h:
+../Core/Inc/dvc_motor_config.h:
+../Core/Inc/dvc_motor.h:
+../Core/Inc/cfg_pid_params.h:
+../Core/Inc/dvc_motor_config.h:

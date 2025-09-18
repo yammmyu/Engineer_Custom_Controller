@@ -1,0 +1,4 @@
+../Core/Src/drv_uart.c:41:6:UART_Init	7
+../Core/Src/drv_uart.c:95:9:UART_Send_Data	1
+../Core/Src/drv_uart.c:104:6:TIM_UART_PeriodElapsedCallback	1
+../Core/Src/drv_uart.c:116:6:HAL_UARTEx_RxEventCallback	7

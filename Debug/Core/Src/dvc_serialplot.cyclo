@@ -1,0 +1,9 @@
+../Core/Src/dvc_serialplot.c:22:16:Serialplot_JudgeVariableName	5
+../Core/Src/dvc_serialplot.c:54:13:Serialplot_JudgeVariableValue	7
+../Core/Src/dvc_serialplot.c:96:6:Serialplot_Init	1
+../Core/Src/dvc_serialplot.c:120:6:Serialplot_SetData	3
+../Core/Src/dvc_serialplot.c:137:6:Serialplot_Output	13
+../Core/Src/dvc_serialplot.c:174:8:Serialplot_GetVariableIndex	1
+../Core/Src/dvc_serialplot.c:179:8:Serialplot_GetVariableValue	1
+../Core/Src/dvc_serialplot.c:184:6:Serialplot_UART_RxCpltCallback	1
+../Core/Src/dvc_serialplot.c:191:6:Serialplot_TIM_PeriodElapsedCallback	1

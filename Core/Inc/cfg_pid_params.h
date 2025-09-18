@@ -5,7 +5,9 @@
 #include <alg_pid.h>   // your existing pid_t and pid API
 #include <stdint.h>
 #include "dvc_motor_config.h"
+#include "stm32f4xx_hal.h"
 
+#define MOTOR_COUNT 6
 /**
  * @brief Blueprint for PID configuration parameters
  */

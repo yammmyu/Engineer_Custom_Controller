@@ -36,7 +36,9 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern CAN_HandleTypeDef hcan2;
+// In can.h (or similar)
+void Enable_CAN2(void);
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

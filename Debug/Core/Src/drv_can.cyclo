@@ -1,0 +1,5 @@
+../Core/Src/drv_can.c:26:6:Enable_CAN2	4
+../Core/Src/drv_can.c:59:6:Set_GM6020_Voltage	2
+../Core/Src/drv_can.c:83:6:Set_C620_Current	2
+../Core/Src/drv_can.c:118:15:motor_index_from_id	7
+../Core/Src/drv_can.c:133:6:HAL_CAN_RxFifo0MsgPendingCallback	4

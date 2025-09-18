@@ -1,8 +1,3 @@
-
-//
-// Created by 29851 on 2024/6/29.
-//
-
 #ifndef MOTOR_H
 #define MOTOR_H
 

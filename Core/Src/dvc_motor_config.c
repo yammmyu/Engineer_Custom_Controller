@@ -1,5 +1,8 @@
 #include "dvc_motor_config.h"
 #include "cfg_pid_params.h"
+#include "stm32f4xx_hal.h"
+#include "main.h"
+
 
 Motor_t motors[MOTOR_COUNT];
 
@@ -24,6 +27,15 @@ void Motors_Init(void)
         Control_Method_ANGLE   // motor5
     };
 
+	float encoder_offsets[MOTOR_COUNT] = {
+		0.0f, // motor0
+		0.0f, // motor1
+		0.0f, // motor2
+		0.0f, // motor3
+		0.0f, // motor4
+		0.0f  // motor5
+	};
+
     for (int i = 0; i < MOTOR_COUNT; i++) {
         // Init motor struct
         Motor_Init(&motors[i],
@@ -33,7 +45,7 @@ void Motors_Init(void)
                    1.0f,                 // gearbox ratio (adjust per motor)
                    1.0f,                 // torque_max
                    400.0f,               // omega_max
-                   0);                   // encoder offset
+                   encoder_offsets[i]);                   // encoder offset
 
         // Angle PID
         pid_init(&motors[i].PID_Angle,

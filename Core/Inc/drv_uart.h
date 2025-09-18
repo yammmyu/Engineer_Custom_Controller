@@ -41,6 +41,16 @@ struct Struct_UART_Manage_Object
     UART_Call_Back Callback_Function;
 };
 
+typedef struct {
+    UART_HandleTypeDef *UART_Handler;
+    void (*Callback_Function)(uint8_t *data, uint16_t size);
+    uint8_t *Rx_Buffer;
+    uint16_t Rx_Buffer_Length;
+    uint8_t *Tx_Buffer;
+    uint16_t Tx_Buffer_Length;
+} Struct_UART_Manage_Object;
+
+
 /* Exported variables --------------------------------------------------------*/
 
 extern UART_HandleTypeDef huart1;

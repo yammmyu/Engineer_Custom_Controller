@@ -136,7 +136,7 @@ void pid_tick(pid_t *pid)
 
 
     /* Feedforward */
-    float F = pid->Kf * (pid->target - pid->prev_target);
+    F = pid->Kf * (pid->target - pid->prev_target);
 
 
     /* Output sum */

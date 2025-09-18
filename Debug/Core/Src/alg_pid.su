@@ -1,0 +1,7 @@
+../Core/Src/alg_pid.c:16:6:pid_init	64	static
+../Core/Src/alg_pid.c:47:6:pid_set_target	16	static
+../Core/Src/alg_pid.c:51:6:pid_set_now	16	static
+../Core/Src/alg_pid.c:55:6:pid_reset_integral	16	static
+../Core/Src/alg_pid.c:65:6:pid_tick	48	static
+../Core/Src/alg_pid.c:161:7:pid_get_out	16	static
+../Core/Src/alg_pid.c:166:7:pid_get_integral	16	static

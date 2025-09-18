@@ -17,7 +17,6 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <drv_can.h>
 #include "main.h"
 #include "can.h"
 #include "dma.h"
@@ -26,16 +25,17 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "timebase.h"
+#include "dvc_timebase.h"
 #include "dvc_serialplot.h"
 #include "dvc_motor.h"
 #include "alg_pid.h"
+#include "dvc_motor_config.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-UART_HandleTypeDef huart2;
 UART_Manage_t uart2_mgr;   // one per UART
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -89,30 +89,18 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  arm_control_init();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_CAN1_Init();
-  MX_USART3_UART_Init();
   MX_CAN2_Init();
   MX_USART2_UART_Init();
+
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
-  MX_TIM2_Init();
-
-  // --- Initialize Serialplot ---
-    Serialplot_Init(&plot,
-                    &huart2,
-                    &uart2_mgr,
-                    0, NULL,  // no rx dictionary
-                    Serialplot_Data_Type_FLOAT,
-                    0xAA);
-
-    Serialplot_SetData(&plot, 3, &var1, &var2, &var3);
-
+  Motors_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,12 +108,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    var1 += 0.1f;
-    var2 += 0.2f;
-    var3 += 0.3f;
 
-    Serialplot_TIM_PeriodElapsedCallback(&plot);
-    HAL_Delay(10);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

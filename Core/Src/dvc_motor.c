@@ -3,6 +3,7 @@
 #include "cfg_pid_params.h"
 #include "alg_pid.h"
 #include <math.h>   // for lroundf if needed
+#include "stm32f4xx_hal.h"
 
 
 /* ---------------- Internal Helpers ---------------- */

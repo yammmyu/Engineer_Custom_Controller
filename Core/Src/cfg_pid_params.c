@@ -1,5 +1,7 @@
 #include "cfg_pid_params.h"
 #include "dvc_motor_config.h"
+#include "stm32f4xx_hal.h"
+
 
 /*
  * Defaults — adjust for your machine.

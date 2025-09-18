@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "alg_pid.h"
+#include "stm32f4xx_hal.h"
 
 /* ---------------- Constants ---------------- */
 
@@ -18,7 +19,7 @@
 
 /* ---------------- Enumerations ---------------- */
 
-// Supported control methoda
+// Supported control methods
 typedef enum {
     Control_Method_OPENLOOP = 0,
     Control_Method_TORQUE,
