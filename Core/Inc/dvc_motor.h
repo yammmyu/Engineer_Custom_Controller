@@ -18,7 +18,7 @@
 
 /* ---------------- Enumerations ---------------- */
 
-// Supported control methods
+// Supported control methoda
 typedef enum {
     Control_Method_OPENLOOP = 0,
     Control_Method_TORQUE,
@@ -26,7 +26,7 @@ typedef enum {
     Control_Method_ANGLE
 } Enum_Control_Method;
 
-// Motor status (alive or not)
+// Motor status (alive?)
 typedef enum {
     CAN_Motor_Status_DISABLE = 0,
     CAN_Motor_Status_ENABLE
