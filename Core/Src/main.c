@@ -20,6 +20,7 @@
 #include "main.h"
 #include "can.h"
 #include "dma.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -30,6 +31,8 @@
 #include "dvc_motor.h"
 #include "alg_pid.h"
 #include "dvc_motor_config.h"
+#include "drv_can.h"
+#include "math.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,10 +100,12 @@ int main(void)
   MX_CAN1_Init();
   MX_CAN2_Init();
   MX_USART2_UART_Init();
-
+  HAL_TIM_Base_Start_IT(&htim6);
+  MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
   Motors_Init();
+  Motor_Set_Target_Angle(&motors[3], M_PI/2.0f);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -114,6 +119,23 @@ int main(void)
   /* USER CODE END 3 */
 }
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM6)
+    {
+        for (int i = 0; i < MOTOR_COUNT; i++) {
+            Motor_TIM_PID_PeriodElapsedCallback(&motors[i]);
+        }
+
+        Set_C620_Current((int16_t)motors[0].Out,
+                         (int16_t)motors[1].Out,
+                         (int16_t)motors[2].Out);
+
+        Set_GM6020_Voltage((int16_t)motors[3].Out,
+                           (int16_t)motors[4].Out,
+                           (int16_t)motors[5].Out);
+    }
+}
 /**
   * @brief System Clock Configuration
   * @retval None

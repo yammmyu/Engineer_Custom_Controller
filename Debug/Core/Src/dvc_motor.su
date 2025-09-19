@@ -18,5 +18,5 @@
 ../Core/Src/dvc_motor.c:76:6:Motor_Set_Target_Torque	16	static
 ../Core/Src/dvc_motor.c:77:6:Motor_Set_Out	16	static
 ../Core/Src/dvc_motor.c:81:6:Motor_CAN_RxCpltCallback	24	static
-../Core/Src/dvc_motor.c:111:6:Motor_TIM_Alive_PeriodElapsedCallback	16	static
-../Core/Src/dvc_motor.c:122:6:Motor_TIM_PID_PeriodElapsedCallback	24	static
+../Core/Src/dvc_motor.c:110:6:Motor_TIM_Alive_PeriodElapsedCallback	16	static
+../Core/Src/dvc_motor.c:121:6:Motor_TIM_PID_PeriodElapsedCallback	24	static

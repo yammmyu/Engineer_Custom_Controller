@@ -81,7 +81,6 @@ void Motor_Set_Out(Motor_t *motor, float out) { motor->Out = out; }
 void Motor_CAN_RxCpltCallback(Motor_t *motor, uint8_t *rx_data)
 {
     int16_t delta_encoder;
-
     motor->Flag++;
 
     motor->Pre_Encoder = motor->Rx_Encoder;
@@ -123,26 +122,32 @@ void Motor_TIM_PID_PeriodElapsedCallback(Motor_t *motor)
 {
     switch (motor->Control_Method) {
     case Control_Method_OPENLOOP:
-        // Open-loop: directly scale torque to output
         motor->Out = motor->Target_Torque / motor->Torque_Max * motor->Output_Max;
         break;
 
     case Control_Method_TORQUE:
-        // Torque control: directly scale torque to output
-        motor->Out = motor->Target_Torque / motor->Torque_Max * motor->Output_Max;
+        pid_set_target(&motor->PID_Torque, motor->Target_Torque);
+        pid_set_now(&motor->PID_Torque, motor->Now_Torque);
+        pid_tick(&motor->PID_Torque);
+        motor->Out = pid_get_out(&motor->PID_Torque);
         break;
 
     case Control_Method_OMEGA:
-        // Speed control: PID_Omega already clamps output inside pid_tick()
+        pid_set_target(&motor->PID_Omega, motor->Target_Omega);
+        pid_set_now(&motor->PID_Omega, motor->Now_Omega);
         pid_tick(&motor->PID_Omega);
         motor->Out = pid_get_out(&motor->PID_Omega);
         break;
 
     case Control_Method_ANGLE:
-        // Double-loop control: angle PID outputs target speed, which feeds into speed PID
+        pid_set_target(&motor->PID_Angle, motor->Target_Angle);
+        pid_set_now(&motor->PID_Angle, motor->Now_Angle);
         pid_tick(&motor->PID_Angle);
+
         pid_set_target(&motor->PID_Omega, pid_get_out(&motor->PID_Angle));
+        pid_set_now(&motor->PID_Omega, motor->Now_Omega);
         pid_tick(&motor->PID_Omega);
+
         motor->Out = pid_get_out(&motor->PID_Omega);
         break;
 
@@ -151,3 +156,4 @@ void Motor_TIM_PID_PeriodElapsedCallback(Motor_t *motor)
         break;
     }
 }
+
