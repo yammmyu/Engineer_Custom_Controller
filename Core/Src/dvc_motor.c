@@ -144,11 +144,11 @@ void Motor_TIM_PID_PeriodElapsedCallback(Motor_t *motor)
         pid_set_now(&motor->PID_Angle, motor->Now_Angle);
         pid_tick(&motor->PID_Angle);
 
-        pid_set_target(&motor->PID_Omega, pid_get_out(&motor->PID_Angle));
-        pid_set_now(&motor->PID_Omega, motor->Now_Omega);
-        pid_tick(&motor->PID_Omega);
+        pid_set_target(&motor->PID_Torque, pid_get_out(&motor->PID_Angle));
+        pid_set_now(&motor->PID_Torque, motor->Now_Torque);
+        pid_tick(&motor->PID_Torque);
 
-        motor->Out = pid_get_out(&motor->PID_Omega);
+        motor->Out = pid_get_out(&motor->PID_Angle);
         break;
 
     default:

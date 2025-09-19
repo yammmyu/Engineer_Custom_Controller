@@ -61,6 +61,8 @@ typedef struct {
 
     /* Output */
     float out;
+
+    uint32_t last_tick_ms;
 } pid_t;
 
 /* Initialization */

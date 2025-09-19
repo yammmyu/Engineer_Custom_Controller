@@ -9,6 +9,9 @@
 
 
 #include <alg_pid.h>
+#include <dvc_timebase.h>
+#include "stm32f4xx_hal.h"
+
 
 /**
  * @brief Initialize PID controller
@@ -24,16 +27,14 @@ void pid_init(pid_t *pid,
     pid->Ki = Ki;
     pid->Kd = Kd;
     pid->Kf = Kf;
-    pid->dt = dt;
+    pid->dt = 0.0f; // will be updated dynamically
     pid->dead_zone = dead_zone;
     pid->d_mode = d_mode;
-
     pid->i_out_max = i_max;
     pid->out_max = out_max;
     pid->i_var_a = i_var_a;
     pid->i_var_b = i_var_b;
     pid->i_sep_threshold = i_sep_threshold;
-
     pid->target = 0.0f;
     pid->now = 0.0f;
     pid->integral_error = 0.0f;
@@ -42,7 +43,10 @@ void pid_init(pid_t *pid,
     pid->prev_target = 0.0f;
     pid->prev_out = 0.0f;
     pid->out = 0.0f;
+
+    pid->last_tick_ms = HAL_GetTick(); // start per-PID timer
 }
+
 
 void pid_set_target(pid_t *pid, float target) {
     pid->target = target;
@@ -56,7 +60,6 @@ void pid_reset_integral(pid_t *pid) {
     pid->integral_error = 0.0f;
 }
 
-
 /**
  * @brief Run one PID update Calculation
  * 
@@ -64,6 +67,13 @@ void pid_reset_integral(pid_t *pid) {
  */
 void pid_tick(pid_t *pid)
 {
+    uint32_t now_ms = HAL_GetTick();
+    float dt = (now_ms - pid->last_tick_ms) / 1000.0f; // ms → s
+    if (dt <= 0.0f) dt = 1e-6f; // safety clamp
+
+    pid->dt = dt;
+    pid->last_tick_ms = now_ms;
+
     float P = 0.0f, I = 0.0f, D = 0.0f, F = 0.0f;
     
     float error = pid->target - pid->now;

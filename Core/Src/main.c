@@ -100,12 +100,14 @@ int main(void)
   MX_CAN1_Init();
   MX_CAN2_Init();
   MX_USART2_UART_Init();
-  HAL_TIM_Base_Start_IT(&htim6);
-  MX_TIM6_Init();
+  MX_TIM6_Init();                    // init TIM6 first
+  HAL_TIM_Base_Start_IT(&htim6);     // then start it with interrupt enabled
+
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
   Motors_Init();
   Motor_Set_Target_Angle(&motors[3], M_PI/2.0f);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

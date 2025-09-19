@@ -11,7 +11,7 @@
 motor_pid_cfg_t motor_pid_cfg[MOTOR_COUNT] = {
     // motor0
     {
-        .angle  = { 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0,0,0,0 },
+        .angle  = { 1.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0,0,0,0 },
         .torque = { 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0,0,0,0 }
     },
 
@@ -29,8 +29,8 @@ motor_pid_cfg_t motor_pid_cfg[MOTOR_COUNT] = {
 
     // motor3
     {
-        .angle  = { 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0,0,0,0 },
-        .torque = { 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 0.0f, 0.0f, 0,0,0,0 }
+        .angle  = { 2000.0f, 0.0f, 0.0f, 0.0f, 0, 25000, 0.0f, 0.0f, 0,0,0,0 },
+        .torque = { 1.0f, 0.0f, 0.0f, 0.0f, 0, 25000, 0.0f, 0.0f, 0,0,0,0 }
     },
 
     // motor4
