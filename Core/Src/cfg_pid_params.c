@@ -29,7 +29,7 @@ motor_pid_cfg_t motor_pid_cfg[MOTOR_COUNT] = {
 
     // motor3
     {
-        .angle  = { 2000.0f, 0.0f, 0.0f, 0.0f, 0, 25000, 0.0f, 0.0f, 0,0,0,0 },
+        .angle  = { 10000.0f, 3000.0f, 0.0f, 0.0f, 0, 25000, 0.0f, 0.0f, 0,0,0,0 }, //Currently only using single loop
         .torque = { 1.0f, 0.0f, 0.0f, 0.0f, 0, 25000, 0.0f, 0.0f, 0,0,0,0 }
     },
 
