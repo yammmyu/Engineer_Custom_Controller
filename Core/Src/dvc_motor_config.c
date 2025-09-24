@@ -13,9 +13,9 @@ void Motors_Init(void)
         CAN_Motor_ID_0x201, // motor0
         CAN_Motor_ID_0x202, // motor1
         CAN_Motor_ID_0x203, // motor2
-        CAN_Motor_ID_0x205, // motor3
-        CAN_Motor_ID_0x206, // motor4
-        CAN_Motor_ID_0x207  // motor5
+        CAN_Motor_ID_0x209, // motor3
+        CAN_Motor_ID_0x20A, // motor4
+        CAN_Motor_ID_0x20B  // motor5
     };
 
     Enum_Control_Method methods[MOTOR_COUNT] = {

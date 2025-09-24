@@ -106,7 +106,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
   Motors_Init();
-  Motor_Set_Target_Angle(&motors[3], M_PI/2.0f);
+  Motor_Set_Target_Angle(&motors[3], -1.8f);
+  Motor_Set_Target_Angle(&motors[4], -2.0f);
 
   /* USER CODE END 2 */
 
