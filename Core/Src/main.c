@@ -33,6 +33,7 @@
 #include "dvc_motor_config.h"
 #include "drv_can.h"
 #include "math.h"
+#include "drv_comm.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +46,7 @@ UART_Manage_t uart2_mgr;   // one per UART
 /* USER CODE BEGIN PD */
 Serialplot_t plot;
 volatile int16_t debug_cmd_motor7 = 0;
+#define SEND_INTERVAL_MS 100 // Send data every 100ms
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -56,12 +58,16 @@ volatile int16_t debug_cmd_motor7 = 0;
 
 /* USER CODE BEGIN PV */
 float var1, var2, var3;
+
+AnglesAndButtons_t sensor_data = {0};
+ControllerFrame_t tx_frame = {0};
+static uint32_t last_send_time = 0; // Track last send time for periodic transmission
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void collect_and_send_data(void); // Function to collect and send angle data
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -74,7 +80,6 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -102,6 +107,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM6_Init();                    // init TIM6 first
   HAL_TIM_Base_Start_IT(&htim6);     // then start it with interrupt enabled
+  protocol_init();
 
   /* USER CODE BEGIN 2 */
   Enable_CAN2();
@@ -118,8 +124,41 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    // Check if it's time to send data (every 100ms)
+    if (HAL_GetTick() - last_send_time >= SEND_INTERVAL_MS) {
+        collect_and_send_data();
+        last_send_time = HAL_GetTick();
+    }
   }
   /* USER CODE END 3 */
+}
+
+
+void send_to_vtm(const ControllerFrame_t* frame) {
+    // Transmit via UART (blocking)
+    HAL_UART_Transmit(&huart2, (uint8_t*)frame, DATA_FRAME_LENGTH, HAL_MAX_DELAY);
+}
+/**
+  * @brief Collect angle data and send via UART
+  * @retval None
+  *
+  *
+  */
+void collect_and_send_data(void) {
+    // Populate sensor_data with motor angles and button statuses
+    for (int i = 0; i < 6; i++) {
+        sensor_data.angle_data[i] = motors[i].Now_Angle; // Assuming motors[i].Angle exists
+    }
+    // Set button statuses (example: all buttons off; modify as needed)
+    sensor_data.button_status[0] = 0;
+    sensor_data.button_status[1] = 0;
+    sensor_data.button_status[2] = 0;
+
+    // Prepare the frame
+    protocol_concatenate_data(&sensor_data, &tx_frame);
+
+    // Send the frame via UART
+    send_to_vtm(&tx_frame);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -139,6 +178,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
                            (int16_t)motors[5].Out);
     }
 }
+
+
+
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -194,8 +236,7 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
   __disable_irq();
   while (1)
   {
@@ -204,6 +245,7 @@ HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
   }
   /* USER CODE END Error_Handler_Debug */
 }
+
 #ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
@@ -215,7 +257,7 @@ HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his SSSown implementation to report the file name and line number,
+  /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }

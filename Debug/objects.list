@@ -3,6 +3,7 @@
 "./Core/Src/cfg_pid_params.o"
 "./Core/Src/dma.o"
 "./Core/Src/drv_can.o"
+"./Core/Src/drv_comm.o"
 "./Core/Src/drv_uart.o"
 "./Core/Src/dvc_motor.o"
 "./Core/Src/dvc_motor_config.o"

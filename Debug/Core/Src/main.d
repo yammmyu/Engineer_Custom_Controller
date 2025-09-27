@@ -34,7 +34,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/alg_pid.h ../Core/Inc/alg_pid.h \
  ../Core/Inc/dvc_motor_config.h ../Core/Inc/dvc_motor.h \
  ../Core/Inc/cfg_pid_params.h ../Core/Inc/dvc_motor_config.h \
- ../Core/Inc/drv_can.h
+ ../Core/Inc/drv_can.h ../Core/Inc/drv_comm.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -81,3 +81,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/cfg_pid_params.h:
 ../Core/Inc/dvc_motor_config.h:
 ../Core/Inc/drv_can.h:
+../Core/Inc/drv_comm.h:

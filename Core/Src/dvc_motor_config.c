@@ -36,16 +36,19 @@ void Motors_Init(void)
 		0.0f  // motor5
 	};
 
-    for (int i = 0; i < MOTOR_COUNT; i++) {
-        // Init motor struct
-        Motor_Init(&motors[i],
-                   &hcan2,               // CAN bus (could mix hcan1/hcan2 if needed)
-                   motor_ids[i],
-                   methods[i],
-                   1.0f,                 // gearbox ratio (adjust per motor)
-                   1.0f,                 // torque_max
-                   400.0f,               // omega_max
-                   encoder_offsets[i]);                   // encoder offset
+	for (int i = 0; i < MOTOR_COUNT; i++) {
+	    // Set gearbox ratio: 36.0 when i is 0, 1, or 2; else 0.0
+	    float gearbox_ratio = (i <= 2) ? 36.0f : 1.0f;
+
+	    // Init motor struct
+	    Motor_Init(&motors[i],
+	               &hcan2,               // CAN bus (could mix hcan1/hcan2 if needed)
+	               motor_ids[i],
+	               methods[i],
+	               gearbox_ratio,        // gearbox ratio (36.0 for i=0,1,2; 0.0 otherwise)
+	               1.0f,                 // torque_max
+	               400.0f,               // omega_max
+	               encoder_offsets[i]);
 
         // Angle PID
         pid_init(&motors[i].PID_Angle,

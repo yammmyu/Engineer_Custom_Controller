@@ -1,0 +1,8 @@
+../Core/Src/drv_comm.c:64:6:protocol_init	4	static
+../Core/Src/drv_comm.c:68:9:get_CRC8_check_sum	32	static
+../Core/Src/drv_comm.c:77:10:verify_CRC8_check_sum	24	static
+../Core/Src/drv_comm.c:86:6:append_CRC8_check_sum	24	static
+../Core/Src/drv_comm.c:95:10:get_CRC16_check_sum	32	static
+../Core/Src/drv_comm.c:107:10:verify_CRC16_check_sum	24	static
+../Core/Src/drv_comm.c:117:6:append_CRC16_check_sum	24	static
+../Core/Src/drv_comm.c:127:6:protocol_concatenate_data	16	static
